@@ -44,7 +44,7 @@ namespace MallMapsApi.Data
 
         public FirmUser Verifiy(FirmUser user)
         {
-            Dictionary<object, object> searchObject = new Dictionary<object, object>();
+            Dictionary<string, object> searchObject = new Dictionary<string, object>();
             if (user.Password == "Admin" && user.Username == "Admin")
             {
                 searchObject.Add("username", user.Username);
@@ -55,7 +55,7 @@ namespace MallMapsApi.Data
                 searchObject.Add("username", user.Username);
                 searchObject.Add("password", user.Password = Sha256Hash(user.Password));
             }
-            _crud.Get(searchObject, user);
+            _crud.Get<FirmUser>(searchObject);
             throw new NotImplementedException();
         }
     }

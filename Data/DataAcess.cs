@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using MallMapsApi.DTO;
+using MallMapsApi.Utils;
 
 namespace MallMapsApi.Data
 {
@@ -15,74 +16,100 @@ namespace MallMapsApi.Data
             _configuration = configuration;
             con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         }
-        public T Delete<T>(T type)
-        {
-            throw new NotImplementedException();
-        }
 
-        public T Get<T>(T type)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// We can search for up to 2 diffrent criterias, Key is colum name and value is value
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="BaseEntity"></typeparam>
         /// <param name="searchData"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public T Get<T>(Dictionary<object, object> searchData, T type)
+        public IEnumerable<BaseEntity> Get<BaseEntity>(Dictionary<string, object> searchData)
         {
-            string tType = type.GetType().ToString();
-            OpenConnection();
-            SqlCommand cmd = con.CreateCommand();
-            if (searchData.Count == 1)
+            try
             {
-                cmd.CommandText = $"select * from {type.GetType().ToString} Where @colum = @value";
-                cmd.Parameters.AddWithValue("@colum", searchData.ElementAt(0).Key);
-                cmd.Parameters.AddWithValue("@value", searchData.ElementAt(1).Value);
-            }
-            if (searchData.Count == 2)
-            {
-                cmd.CommandText = $"select * from {type.GetType().ToString} Where @colum = @value and @colum2 = @value2";
-                cmd.Parameters.AddWithValue("@colum", searchData.ElementAt(0).Key);
-                cmd.Parameters.AddWithValue("@value", searchData.ElementAt(1).Value);
-                cmd.Parameters.AddWithValue("@colum2", searchData.ElementAt(2).Key);
-                cmd.Parameters.AddWithValue("@value2", searchData.ElementAt(3).Value);
-            }
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                if (tType == "FirmUser")
+                if (searchData.Count() == 0)
+                    throw new ArgumentNullException("Search data is empty");
+
+                OpenConnection();
+                SqlCommand cmd = DbHelper.BuildWhereCommand<BaseEntity>(searchData, con.CreateCommand());
+
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    FirmUser user = new FirmUser();
-                    user.Firm = reader["firmid"].ToString();
-                    user.Id = Convert.ToInt32(reader["id"].ToString());
-                    user.SessionKey = reader["sessionkey"].ToString();
-                    user.Password = reader["password"].ToString();
-                    user.Username = reader["username"].ToString();
-                    user.Role = reader["role"].ToString();
+                    if (!reader.HasRows)
+                        return Enumerable.Empty<BaseEntity>();
 
+                    return reader.Cast<BaseEntity>();
                 }
-            };
-            CloseConnection();
+
+
+            }
+            catch (Exception)
+            {
+                return Enumerable.Empty<BaseEntity>();
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public IEnumerable<BaseEntity> Get<BaseEntity>()
+        {
+            try
+            {
+                OpenConnection();
+                var cmd = con.CreateCommand();
+                cmd.CommandText = $"SELECT * FROM {typeof(BaseEntity).Name}";
+                using(SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    return reader.Cast<BaseEntity>();
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public BaseEntity Insert<BaseEntity>(BaseEntity baseEntity)
+        {
+            try
+            {
+                OpenConnection();
+                SqlCommand cmd = DbHelper.BuildInsert<BaseEntity>(baseEntity, con.CreateCommand());
+
+                if (cmd.ExecuteNonQuery() > 0)
+                    return baseEntity;
+
+                return default(BaseEntity);
+            }
+            catch (Exception)
+            {
+                return default(BaseEntity);
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+        public BaseEntity Update<BaseEntity>(BaseEntity baseEntity)
+        {
             throw new NotImplementedException();
         }
 
-        public T Insert<T>(T type)
+        public BaseEntity Delete<BaseEntity>(BaseEntity baseEntity)
         {
-            OpenConnection();
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandText = $"insert into FirmUser(username,password,firmid,role,sessionkey) values(@username,@password,@firmid,@role,@sessionkey)";
-            CloseConnection();
             throw new NotImplementedException();
         }
 
-        public T Update<T>(T type)
-        {
-            throw new NotImplementedException();
-        }
         public void OpenConnection()
         {
             if (con.State != System.Data.ConnectionState.Open)
@@ -94,5 +121,7 @@ namespace MallMapsApi.Data
             if (con.State != System.Data.ConnectionState.Closed)
                 con.Close();
         }
+
+
     }
 }

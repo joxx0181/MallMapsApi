@@ -2,11 +2,13 @@
 {
     public interface ICrudAcess
     {
-        public T Insert<T>(T type);
-        public T Update<T>(T type);
-        public T Delete<T>(T type);
-        public T Get<T>(T type);
-        public T Get<T>(Dictionary<object,object> searchData, T type);
+        public BaseEntity Insert<BaseEntity>(BaseEntity baseEntity);
+        public BaseEntity Update<BaseEntity>(BaseEntity baseEntity);
+        public BaseEntity Delete<BaseEntity>(BaseEntity baseEntity);
+        public IEnumerable<BaseEntity> Get<BaseEntity>();
+        public IEnumerable<BaseEntity> Get<BaseEntity>(Dictionary<string,object> searchData);
+
+
         public void OpenConnection();
         public void CloseConnection();
 
