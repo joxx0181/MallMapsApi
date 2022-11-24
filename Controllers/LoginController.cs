@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MallMapsApi.DTO;
+using MallMapsApi.Interface;
 
 namespace MallMapsApi.Controllers
 {
@@ -6,10 +8,26 @@ namespace MallMapsApi.Controllers
     [Route("Validate")]
     public class LoginController : Controller
     {
-        [HttpPost("Login")]
-        public IActionResult Login(string test)
+        private readonly IVerify _verify;
+
+        public LoginController(IVerify verify)
         {
-            return Ok("Du er logget ind " + test);
+            _verify = verify;
+        }
+
+        [HttpPost("Login")]
+        public IActionResult Login(FirmUser user)
+        {
+            _verify.Verifiy(user);
+            return Ok();
+        }
+
+        [HttpPost("Create")]
+
+        public IActionResult Create(FirmUser user)
+        {
+            _verify.CreateUser(user);
+            return Ok();
         }
     }
 }
