@@ -1,4 +1,4 @@
-﻿namespace MallMapsApi.Data
+﻿namespace MallMapsApi
 {
     public class ApiKeyMiddleware
     {

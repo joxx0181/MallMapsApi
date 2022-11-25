@@ -1,8 +1,5 @@
-using MallMapsApi;
 using MallMapsApi.Data;
 using MallMapsApi.Interface;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 

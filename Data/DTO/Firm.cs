@@ -1,4 +1,4 @@
-﻿namespace MallMapsApi.DTO
+﻿namespace MallMapsApi.Data.DTO
 {
     public class Firm
     {

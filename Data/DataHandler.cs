@@ -1,27 +1,40 @@
-﻿using MallMapsApi.DTO;
+﻿using MallMapsApi.Controllers.Decorators;
+using MallMapsApi.Data.DTO;
 using MallMapsApi.Interface;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MallMapsApi.Data
 {
     public class DataHandler : IVerify
     {
+        public DataMapper mapper;
         private readonly ICrudAcess _crud;
         public DataHandler(ICrudAcess crud)
         {
             _crud = crud;
         }
 
+        /// <summary>
+        /// Creates a firmuser object and sends it to dataacess
+        /// </summary>
+        /// <param name="uName"></param>
+        /// <param name="password"></param>
+        /// <param name="role"></param>
+        /// <param name="firmid"></param>
+        /// <returns></returns>
         public string CreateUser(string uName, string password, string role, int firmid)
         {
             string hashPas = Sha256Hash(password);
-            _crud.Insert(user);
+            mapper = new DataMapper();
+            _crud.Insert(mapper.FirmUserMapper(uName, hashPas, role, firmid));
             return "User added";
         }
-
+        /// <summary>
+        /// Generates random sessionkey
+        /// </summary>
+        /// <returns></returns>
         public string GenerateSessionKey()
         {
             string token = Guid.NewGuid().ToString();
@@ -29,6 +42,11 @@ namespace MallMapsApi.Data
             return token;
         }
 
+        /// <summary>
+        /// Hash string using sha256
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public string Sha256Hash(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -36,21 +54,23 @@ namespace MallMapsApi.Data
                 return BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(password))).Replace("-", "");
             }
         }
-        public FirmUser Verifiy(FirmUser user)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public SessionUserDecorator Verifiy(string username, string password)
         {
             Dictionary<string, object> searchObject = new Dictionary<string, object>();
-            if (user.Password == "Admin" && user.Username == "Admin")
-            {
-                searchObject.Add("username", user.Username);
-                searchObject.Add("password", user.Password);
-            }
-            else
-            {
-                searchObject.Add("username", user.Username);
-                searchObject.Add("password", user.Password = Sha256Hash(user.Password));
-            }
-            _crud.Get<FirmUser>(searchObject);
-            throw new NotImplementedException();
+            searchObject.Add("username", username);
+            searchObject.Add("password", Sha256Hash(password));
+            FirmUser user = _crud.Get<FirmUser>(searchObject)?.FirstOrDefault();
+            if (user == null)
+                return null;
+            return new SessionUserDecorator(user);
         }
     }
 }

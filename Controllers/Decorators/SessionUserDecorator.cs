@@ -6,20 +6,20 @@ namespace MallMapsApi.Controllers.Decorators
 {
     public class SessionUserDecorator
     {
-        private FirmUserDecorator _firmUserDecorator;
+        private FirmUser _firmuser;
 
-        public SessionUserDecorator(FirmUserDecorator firmUserDecorator)
+        public SessionUserDecorator(FirmUser firmUser)
         {
-            _firmUserDecorator = firmUserDecorator;
+            _firmuser = firmUser;
         }
         public string Role
         {
-            get { return _firmUserDecorator.Role; }
+            get { return _firmuser.Role; }
         }
         
         public string SessionKey
         {
-            get { return _firmUserDecorator.SessionKey; }
+            get { return _firmuser.SessionKey; }
         }
     }
 }
