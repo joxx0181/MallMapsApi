@@ -41,9 +41,6 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFile));
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); //This lines
 });
-
-//builder.Services.Configure<ApiBehaviorOptions>(Options => Options.SuppressModelStateInvalidFilter = true);
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -36,8 +36,9 @@ namespace MallMapsApi.Controllers
             }
         }
 
-        [HttpPost("Create")]
+ 
 
+        [HttpPost("Create")]
         public IActionResult Create(string uName, string password, string role, int firmid)
         {
             try
