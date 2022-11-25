@@ -63,9 +63,12 @@ namespace MallMapsApi.Data
                 OpenConnection();
                 var cmd = con.CreateCommand();
                 cmd.CommandText = $"SELECT * FROM {typeof(BaseEntity).Name}";
+
+
+
                 using(SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    return reader.Cast<BaseEntity>();
+                    return new HashSet<BaseEntity>();
                 }
             }
             catch (Exception ex)
@@ -78,6 +81,8 @@ namespace MallMapsApi.Data
             }
         }
 
+
+
         public BaseEntity Insert<BaseEntity>(BaseEntity baseEntity)
         {
             try
@@ -87,10 +92,11 @@ namespace MallMapsApi.Data
 
                 if (cmd.ExecuteNonQuery() > 0)
                     return baseEntity;
+                
 
                 return default(BaseEntity);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return default(BaseEntity);
             }

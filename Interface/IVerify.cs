@@ -8,5 +8,6 @@ namespace MallMapsApi.Interface
         public string GenerateSessionKey();
         public string Sha256Hash(string password);
         public string CreateUser(FirmUser user);
+
     }
 }

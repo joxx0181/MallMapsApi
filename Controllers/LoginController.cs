@@ -22,9 +22,10 @@ namespace MallMapsApi.Controllers
             return Ok();
         }
 
-        [HttpPost("Create")]
+ 
 
-        public IActionResult Create(FirmUser user)
+        [HttpPost("Create")]
+        public  IActionResult Create(FirmUser user)
         {
             _verify.CreateUser(user);
             return Ok();

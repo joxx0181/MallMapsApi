@@ -1,6 +1,7 @@
 using MallMapsApi;
 using MallMapsApi.Data;
 using MallMapsApi.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -41,7 +42,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFile));
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); //This lines
 });
-
+//builder.Services.Configure<ApiBehaviorOptions>(Options => Options.SuppressModelStateInvalidFilter = true);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
