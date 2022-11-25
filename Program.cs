@@ -1,6 +1,7 @@
 using MallMapsApi;
 using MallMapsApi.Data;
 using MallMapsApi.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -12,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<ICrudAcess, DataAcess>();
-builder.Services.AddScoped<ITest, DataHandler>();
 builder.Services.AddScoped<IVerify, DataHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -42,11 +42,14 @@ builder.Services.AddSwaggerGen(options =>
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); //This lines
 });
 
+//builder.Services.Configure<ApiBehaviorOptions>(Options => Options.SuppressModelStateInvalidFilter = true);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
+//app.UseMiddleware<ApiKeyMiddleware>();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "MallMapsApi");

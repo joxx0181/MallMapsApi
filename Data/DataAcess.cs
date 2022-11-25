@@ -1,7 +1,7 @@
 ﻿using MallMapsApi.Interface;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using MallMapsApi.DTO;
+using MallMapsApi.Data.DTO;
 using MallMapsApi.Utils;
 
 namespace MallMapsApi.Data

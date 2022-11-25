@@ -7,7 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace MallMapsApi.Data
 {
-    public class DataHandler : ITest, IVerify
+    public class DataHandler : IVerify
     {
         private readonly ICrudAcess _crud;
         public DataHandler(ICrudAcess crud)
@@ -15,9 +15,9 @@ namespace MallMapsApi.Data
             _crud = crud;
         }
 
-        public string CreateUser(FirmUser user)
+        public string CreateUser(string uName, string password, string role, int firmid)
         {
-            user.Password = Sha256Hash(user.Password);
+            string hashPas = Sha256Hash(password);
             _crud.Insert(user);
             return "User added";
         }
@@ -36,12 +36,6 @@ namespace MallMapsApi.Data
                 return BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(password))).Replace("-", "");
             }
         }
-
-        public void Test()
-        {
-            _crud.Insert("");
-        }
-
         public FirmUser Verifiy(FirmUser user)
         {
             Dictionary<string, object> searchObject = new Dictionary<string, object>();

@@ -1,12 +1,13 @@
-﻿using MallMapsApi.DTO;
+﻿using MallMapsApi.Controllers.Decorators;
+
 
 namespace MallMapsApi.Interface
 {
     public interface IVerify
     {
-        public FirmUser Verifiy(FirmUser user);
+        public SessionUserDecorator Verifiy(string uName, string password);
         public string GenerateSessionKey();
         public string Sha256Hash(string password);
-        public string CreateUser(FirmUser user);
+        public string CreateUser(string uName, string password, string role, int firmid);
     }
 }

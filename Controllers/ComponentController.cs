@@ -7,15 +7,9 @@ namespace MallMapsApi.Controllers
     [Route("Component")]
     public class ComponentController : Controller
     {
-        private readonly ITest _test;
-        public ComponentController(ITest test)
-        {
-            _test = test;
-        }
         [HttpGet("Get")]
         public IActionResult GetById()
         {
-            _test.Test();
             return Ok();
         }
 
