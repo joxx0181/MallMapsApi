@@ -88,6 +88,8 @@ namespace MallMapsApi.Data
             try
             {
                 OpenConnection();
+                
+
                 SqlCommand cmd = DbHelper.BuildInsert<BaseEntity>(baseEntity, con.CreateCommand());
 
                 if (cmd.ExecuteNonQuery() > 0)
