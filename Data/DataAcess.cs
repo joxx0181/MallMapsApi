@@ -82,7 +82,6 @@ namespace MallMapsApi.Data
         }
 
 
-
         public BaseEntity Insert<BaseEntity>(BaseEntity baseEntity)
         {
             try

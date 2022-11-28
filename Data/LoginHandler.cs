@@ -7,11 +7,11 @@ using System.Text;
 
 namespace MallMapsApi.Data
 {
-    public class DataHandler : IVerify
+    public class LoginHandler : IVerify
     {
         public DataMapper mapper;
         private readonly ICrudAcess _crud;
-        public DataHandler(ICrudAcess crud)
+        public LoginHandler(ICrudAcess crud)
         {
             _crud = crud;
         }

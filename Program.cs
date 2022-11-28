@@ -11,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<ICrudAcess, DataAcess>();
-builder.Services.AddScoped<IVerify, DataHandler>();
+builder.Services.AddScoped<IVerify, LoginHandler>();
+builder.Services.AddScoped<IComponent, ComponentHandler>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
