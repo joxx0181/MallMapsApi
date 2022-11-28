@@ -1,9 +1,10 @@
 ﻿using MallMapsApi.Controllers.Decorators;
 using MallMapsApi.Data.DTO;
+using MallMapsApi.Interface;
 
 namespace MallMapsApi.Data
 {
-    public class DataMapper
+    public class DataMapper : IMapper
     {
         public FirmUser FirmUserMapper(string username, string password, string role, int cvrnr)
         {

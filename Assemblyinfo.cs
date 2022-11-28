@@ -17,4 +17,4 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("7fc39f0b-6cff-41a2-a415-4c0083762bba")]
 // Refrence to the unittest project
-[assembly: InternalsVisibleTo("MallMapsUnitTest")]
+[assembly: InternalsVisibleTo("MallApiUnitTest")]

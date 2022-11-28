@@ -39,13 +39,13 @@ namespace MallMapsApi.Controllers
  
 
         [HttpPost("Create")]
-        public IActionResult Create(string uName, string password, string role, int firmid)
+        public IActionResult Create(string username, string password, string role, int firmid)
         {
             try
             {
-                if (DataHelper.IsStringNullOrWhiteSpace(uName) || DataHelper.IsStringNullOrWhiteSpace(password) || DataHelper.IsStringNullOrWhiteSpace(role) || DataHelper.CVRNRIsValid(firmid))
+                if (DataHelper.IsStringNullOrWhiteSpace(username) || DataHelper.IsStringNullOrWhiteSpace(password) || DataHelper.IsStringNullOrWhiteSpace(role) || DataHelper.CVRNRIsValid(firmid))
                     return BadRequest("Values was not inserted correct");
-                return Ok(_verify.CreateUser(uName, password, role, firmid));
+                return Ok(_verify.CreateUser(username, password, role, firmid));
 
             }
             catch (Exception e)
