@@ -37,7 +37,7 @@ namespace MallMapsApi.Data
         /// <returns></returns>
         public string GenerateSessionKey()
         {
-            string token = Guid.NewGuid().ToString();
+            string token = Guid.NewGuid().ToString().Replace("-", "");
 
             return token;
         }
@@ -70,6 +70,8 @@ namespace MallMapsApi.Data
             FirmUser user = _crud.Get<FirmUser>(searchObject)?.FirstOrDefault();
             if (user == null)
                 return null;
+            if (user.SessionKey != null)
+                user.SessionKey = GenerateSessionKey();
             return new SessionUserDecorator(user);
         }
     }

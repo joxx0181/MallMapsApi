@@ -25,8 +25,8 @@ namespace MallMapsApi.Controllers
                     return BadRequest("Username or password was empty");
 
                 SessionUserDecorator sessionUser = _verify.Verifiy(uName, password);
-                if (DataHelper.IsStringNullOrWhiteSpace(sessionUser.SessionKey) || DataHelper.IsStringNullOrWhiteSpace(sessionUser.Role))
-                    return BadRequest("Sessionkey or role was empty");
+                if (sessionUser == null)
+                    return BadRequest("Username or password was wrong");
 
                 return Ok(sessionUser);
             }
