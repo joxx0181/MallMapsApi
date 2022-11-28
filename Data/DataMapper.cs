@@ -15,9 +15,11 @@ namespace MallMapsApi.Data
         /// Maps the compoents and returns a dictonary of Basic and icon ComponentDecorators.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string,object> ComponentMapper(List<Component> components) 
+        public Dictionary<string, object> ComponentMapper(List<Component> components)
         {
-            Dictionary<string,object> componentDict = new Dictionary<string,object>();
+            Dictionary<string, object> componentDict = new Dictionary<string, object>();
+            if (components == null)
+                return null;
             for (int i = 0; i < components.Count; i++)
             {
                 if (components[i].Img != null)

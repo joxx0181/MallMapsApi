@@ -66,7 +66,7 @@ namespace MallMapsApi.Data
         {
             Dictionary<string, object> searchObject = new Dictionary<string, object>();
             searchObject.Add("username", username);
-            searchObject.Add("password", Sha256Hash(password));
+            searchObject.Add("password", password);
             FirmUser user = _crud.Get<FirmUser>(searchObject)?.FirstOrDefault();
             if (user == null)
                 return null;
