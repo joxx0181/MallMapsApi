@@ -1,11 +1,7 @@
-﻿using MallMapsApi.Interface;
-using Microsoft.AspNetCore.Routing.Template;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data.SqlClient;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Xml.Serialization;
+
 
 namespace MallMapsApi.Utils
 {
@@ -39,7 +35,7 @@ namespace MallMapsApi.Utils
                     command.Parameters.AddWithValue($"@{diction.Key}", diction.Value);
                 }
                 //complete the command
-                command.CommandText = $"SELECT * FROM {typeof(BaseEntity).Name} WHERE ( {keyString} )";
+                command.CommandText = $"SELECT * FROM {typeof(BaseEntity).Name} WHERE ({keyString})";
                 //return the command
                 return command;
             }
@@ -55,26 +51,26 @@ namespace MallMapsApi.Utils
         {
 
             var tableName = typeof(BaseEntity).Name;
-            var jsonElement = JsonSerializer.Serialize(obj, obj.GetType());
-            var jsonObject = JObject.Parse(jsonElement);
-            string columns = "";
-            foreach (var item in jsonObject)
+            string columnNames = "";
+            string ColumnValueNames = "";
+
+            foreach (var item in obj.GetType().GetProperties())
             {
-                //Generate columns
-                columns += $"@{item.Key},";
+                //Generate columnNames
+                columnNames += $"{item.Name},";
+                ColumnValueNames += $"@{item.Name},";
                 //add paramaters
-                sql.Parameters.AddWithValue($"@{item.Key}", item.Value);
+                sql.Parameters.AddWithValue($"@{item.Name}", item.GetValue(obj));
             }
 
-            columns = columns.Remove(columns.Length - 1, 1);
-
-            sql.CommandText = $"Insert into {tableName} ({columns})";
-
+            columnNames = columnNames.Remove(columnNames.Length - 1, 1);
+            ColumnValueNames = ColumnValueNames.Remove(ColumnValueNames.Length - 1, 1);
+            sql.CommandText = $"Insert into {tableName} ({columnNames}) VALUES({ColumnValueNames})";
             return sql;
         }
     }
 
 
-
+    
 
 }
