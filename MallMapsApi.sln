@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MallMapsApi", "MallMapsApi.csproj", "{645AE024-84A5-41DB-A6A6-9565D409324E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MallMapsUnitTest", "..\MallMapsUnitTest\MallMapsUnitTest.csproj", "{E8AE87B2-B92E-4447-922E-89007D96A9D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MallApiUnitTest", "MallApiUnitTest\MallApiUnitTest.csproj", "{E2C5FC44-9FDD-443F-8AD1-0F6B399F6C3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{645AE024-84A5-41DB-A6A6-9565D409324E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{645AE024-84A5-41DB-A6A6-9565D409324E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{645AE024-84A5-41DB-A6A6-9565D409324E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8AE87B2-B92E-4447-922E-89007D96A9D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8AE87B2-B92E-4447-922E-89007D96A9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8AE87B2-B92E-4447-922E-89007D96A9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8AE87B2-B92E-4447-922E-89007D96A9D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2C5FC44-9FDD-443F-8AD1-0F6B399F6C3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C5FC44-9FDD-443F-8AD1-0F6B399F6C3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C5FC44-9FDD-443F-8AD1-0F6B399F6C3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C5FC44-9FDD-443F-8AD1-0F6B399F6C3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
