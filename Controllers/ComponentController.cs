@@ -1,4 +1,5 @@
 ﻿using MallMapsApi.Data;
+using MallMapsApi.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MallMapsApi.Controllers
@@ -7,16 +8,33 @@ namespace MallMapsApi.Controllers
     [Route("Component")]
     public class ComponentController : Controller
     {
-        [HttpGet("Get")]
-        public IActionResult GetById()
+        private IComponent _component;
+
+        public ComponentController(IComponent component)
         {
-            return Ok();
+            _component = component;
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        [HttpGet("Get")]
+        public IActionResult GetById(int mapid)
         {
-            return Ok();
+            try
+            {
+                if (mapid == int.MaxValue)
+                    return BadRequest("Wrong input");
+                if (mapid < 0)
+                    return BadRequest("Wrong input");
+
+                Dictionary<string, object> data = _component.GetById(mapid);
+                if (data == null)
+                    return BadRequest("There was no data, with that mapid");
+
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Execption was hit: " + e.Message);
+            }
         }
     }
 }

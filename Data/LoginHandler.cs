@@ -7,11 +7,11 @@ using System.Text;
 
 namespace MallMapsApi.Data
 {
-    public class DataHandler : IVerify
+    public class LoginHandler : IVerify
     {
         public DataMapper mapper;
         private readonly ICrudAcess _crud;
-        public DataHandler(ICrudAcess crud)
+        public LoginHandler(ICrudAcess crud)
         {
             _crud = crud;
         }
@@ -66,7 +66,7 @@ namespace MallMapsApi.Data
         {
             Dictionary<string, object> searchObject = new Dictionary<string, object>();
             searchObject.Add("username", username);
-            searchObject.Add("password", Sha256Hash(password));
+            searchObject.Add("password", password);
             FirmUser user = _crud.Get<FirmUser>(searchObject)?.FirstOrDefault();
             if (user == null)
                 return null;

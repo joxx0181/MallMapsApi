@@ -1,6 +1,5 @@
 ﻿using MallMapsApi.Controllers.Decorators;
 
-
 namespace MallMapsApi.Interface
 {
     public interface IVerify
