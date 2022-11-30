@@ -74,5 +74,10 @@ namespace MallMapsApi.Data
                 user.SessionKey = GenerateSessionKey();
             return new SessionUserDecorator(user);
         }
+
+        public IEnumerable<FirmUser> GetUsers()
+        {
+            return _crud.Get<FirmUser>();
+        }
     }
 }

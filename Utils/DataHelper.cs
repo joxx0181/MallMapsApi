@@ -1,4 +1,6 @@
-﻿namespace MallMapsApi.Utils
+﻿using Microsoft.SqlServer.Types;
+
+namespace MallMapsApi.Utils
 {
     public static class DataHelper
     {
@@ -23,5 +25,8 @@
 
             return false;
         }
+
+
+
     }
 }
