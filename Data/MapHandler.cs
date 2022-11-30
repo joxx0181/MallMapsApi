@@ -1,6 +1,7 @@
 ﻿using MallMapsApi.Controllers.Views;
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Interface;
+using MallMapsApi.Utils;
 
 namespace MallMapsApi.Data
 {
@@ -25,7 +26,7 @@ namespace MallMapsApi.Data
 
         public void GetMapsByLocation(string location)
         {
-            throw new NotImplementedException();
+            if (location.IsStringNullOrWhiteSpace())
         }
     }
 }

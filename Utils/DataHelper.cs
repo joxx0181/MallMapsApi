@@ -4,9 +4,9 @@ namespace MallMapsApi.Utils
 {
     public static class DataHelper
     {
-        public static bool IsStringNullOrWhiteSpace(string str)
+        public static bool IsStringNullOrWhiteSpace(this string str)
         {
-            if(string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
+            if(string.IsNullOrWhiteSpace(str))
                 return true;
             return false;
         }

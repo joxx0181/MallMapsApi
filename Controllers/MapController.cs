@@ -15,9 +15,18 @@ namespace MallMapsApi.Controllers
         }
 
         [HttpGet("Get")]
-        public IActionResult GetByLocation()
+        public IActionResult GetByLocation(string location)
         {
-            return Ok();
+            try
+            {
+                _map.GetMapsByLocation(location);
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Exception was hit: " + e.Message);
+            }
         }
 
         //[HttpPost("Update")]

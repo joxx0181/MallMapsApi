@@ -21,7 +21,7 @@ namespace MallMapsApi.Controllers
         {
             try
             {
-                if (DataHelper.IsStringNullOrWhiteSpace(uName) || DataHelper.IsStringNullOrWhiteSpace(password))
+                if (uName.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace())
                     return BadRequest("Username or password was empty");
 
                 SessionUserDecorator sessionUser = _verify.Verifiy(uName, password);
@@ -43,7 +43,7 @@ namespace MallMapsApi.Controllers
         {
             try
             {
-                if (DataHelper.IsStringNullOrWhiteSpace(username) || DataHelper.IsStringNullOrWhiteSpace(password) || DataHelper.IsStringNullOrWhiteSpace(role) || DataHelper.CVRNRIsValid(firmid))
+                if (username.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace() || role.IsStringNullOrWhiteSpace() || DataHelper.CVRNRIsValid(firmid))
                     return BadRequest("Values was not inserted correct");
                 
 
