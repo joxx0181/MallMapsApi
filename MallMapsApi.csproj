@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Modle\**" />
+    <Content Remove="Controllers\Modle\**" />
+    <EmbeddedResource Remove="Controllers\Modle\**" />
+    <None Remove="Controllers\Modle\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="dotMorten.Microsoft.SqlServer.Types" Version="2.5.0" />
     <PackageReference Include="FakeItEasy" Version="7.3.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
@@ -26,10 +33,6 @@
     <Compile Update="Assemblyinfo.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\Modle\" />
   </ItemGroup>
 
 </Project>

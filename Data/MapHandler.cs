@@ -15,9 +15,11 @@ namespace MallMapsApi.Data
         public string CreateMap(MapV map)
         {
             DataMapper mapper = new DataMapper();
-            if(map != null)
-               return _crudAcess.InsertMap(mapper.MapMapper(map));
-
+            if (map != null)
+            {
+                _crudAcess.Insert<Map>(mapper.MapMapper(map));
+                return "Completed";
+            }
             return "Data was empty";
         }
 
