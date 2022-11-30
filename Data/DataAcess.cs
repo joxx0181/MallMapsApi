@@ -132,7 +132,7 @@ namespace MallMapsApi.Data
                 var refProp = entity.GetType().GetProperty(prop.Name + "Ref");
 
                 var pair = GetChildren(refProp.PropertyType).FirstOrDefault();
-                
+
                 refProp.SetValue(entity, pair);
 
             }
@@ -186,5 +186,51 @@ namespace MallMapsApi.Data
         }
 
 
+
+        public int ValidateUser(string user, string psw)
+        {
+            try
+            {
+                OpenConnection();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "ValidateUser";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(user);
+                cmd.Parameters.Add(psw);
+                var reader = cmd.ExecuteReader();
+                return reader.GetInt32(0);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+        }
+
+        public void UpdateSession(string session, int sessionID)
+        {
+            try
+            {
+                OpenConnection();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "UpdateSession";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(session);
+                cmd.Parameters.Add(sessionID);
+                var reader = cmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
     }
 }
