@@ -1,7 +1,11 @@
 ﻿using MallMapsApi.Controllers.Decorators;
 using MallMapsApi.Controllers.Views;
+using MallMapsApi.CustomAttributes;
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Interface;
+using MallMapsApi.Utils;
+using System.Data;
+using System.Reflection;
 
 namespace MallMapsApi.Data
 {
@@ -43,5 +47,6 @@ namespace MallMapsApi.Data
             }
             return map;
         }
+
     }
 }

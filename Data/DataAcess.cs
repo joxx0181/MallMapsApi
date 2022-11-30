@@ -3,6 +3,11 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Utils;
+using System.Data;
+using MallMapsApi.CustomAttributes;
+using System.Reflection;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Text;
 
 namespace MallMapsApi.Data
 {
@@ -38,10 +43,11 @@ namespace MallMapsApi.Data
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    if (!reader.HasRows)
-                        return Enumerable.Empty<BaseEntity>();
+                    var dataTable = new DataTable();
+                    dataTable.Load(reader);
+                    var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(dataTable);
 
-                    return reader.Cast<BaseEntity>();
+                    return entities;
                 }
 
 
@@ -56,6 +62,32 @@ namespace MallMapsApi.Data
             }
         }
 
+
+
+
+        private IEnumerable<object> GetChildren(Type type = default(Type))
+        {
+            try
+            {
+                if (type == null || type == default(Type))
+                    return null;
+                OpenConnection();
+                var cmd = con.CreateCommand();
+                cmd.CommandText = $"SELECT * FROM {type.GetCustomAttribute<Table>().Name}";
+                DataTable data = new DataTable();
+                SqlDataReader reader = cmd.ExecuteReader();
+                data.Load(reader);
+                return DbHelper.ConvertToBaseEntity(data, type);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
         public IEnumerable<BaseEntity> Get<BaseEntity>()
         {
             try
@@ -63,13 +95,18 @@ namespace MallMapsApi.Data
                 OpenConnection();
                 var cmd = con.CreateCommand();
                 cmd.CommandText = $"SELECT * FROM {typeof(BaseEntity).Name}";
+                DataTable data = new DataTable();
+                SqlDataReader reader = cmd.ExecuteReader();
+                data.Load(reader);
+                var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(data);
 
-
-
-                using(SqlDataReader reader = cmd.ExecuteReader())
+                foreach (var en in entities)
                 {
-                    return new HashSet<BaseEntity>();
+                    Join<BaseEntity>(en);
                 }
+                return entities;
+
+
             }
             catch (Exception ex)
             {
@@ -82,18 +119,37 @@ namespace MallMapsApi.Data
         }
 
 
+        public void Join<BaseEntity>(BaseEntity entity)
+        {
+            var classProperties = entity.GetType().GetProperties().Where(x => x.GetCustomAttribute<ForeignKey>() != null && x.GetType().IsClass);
+            foreach (var prop in classProperties)
+            {
+                var val = prop.GetValue(entity);
+
+                if (val == null)
+                    continue;
+
+                var refProp = entity.GetType().GetProperty(prop.Name + "Ref");
+
+                var pair = GetChildren(refProp.PropertyType).FirstOrDefault();
+
+                refProp.SetValue(entity, pair);
+
+            }
+        }
+
         public BaseEntity Insert<BaseEntity>(BaseEntity baseEntity)
         {
             try
             {
                 OpenConnection();
-                
+
 
                 SqlCommand cmd = DbHelper.BuildInsert<BaseEntity>(baseEntity, con.CreateCommand());
 
                 if (cmd.ExecuteNonQuery() > 0)
                     return baseEntity;
-                
+
 
                 return default(BaseEntity);
             }
@@ -129,9 +185,53 @@ namespace MallMapsApi.Data
                 con.Close();
         }
 
-        public string InsertMap(Map map)
+
+
+
+        public int ValidateUser(string user, string psw)
         {
-            throw new NotImplementedException();
+            try
+            {
+                OpenConnection();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "ValidateUser";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(user);
+                cmd.Parameters.Add(psw);
+                var reader = cmd.ExecuteReader();
+                return reader.GetInt32(0);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+        }
+
+        public void UpdateSession(string session, int sessionID)
+        {
+            try
+            {
+                OpenConnection();
+                SqlCommand cmd = con.CreateCommand();
+                cmd.CommandText = "UpdateSession";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(session);
+                cmd.Parameters.Add(sessionID);
+                var reader = cmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
         }
     }
 }

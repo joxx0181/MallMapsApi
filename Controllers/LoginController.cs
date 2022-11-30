@@ -45,6 +45,8 @@ namespace MallMapsApi.Controllers
             {
                 if (DataHelper.IsStringNullOrWhiteSpace(username) || DataHelper.IsStringNullOrWhiteSpace(password) || DataHelper.IsStringNullOrWhiteSpace(role) || DataHelper.CVRNRIsValid(firmid))
                     return BadRequest("Values was not inserted correct");
+                
+
                 return Ok(_verify.CreateUser(username, password, role, firmid));
 
             }
@@ -52,6 +54,13 @@ namespace MallMapsApi.Controllers
             {
                 return BadRequest("Exception was hit" + e.Message);
             }
+        }
+
+
+        [HttpGet("GetUsers")]
+        public IActionResult GetUsers()
+        {
+            return Ok(_verify.GetUsers());
         }
     }
 }

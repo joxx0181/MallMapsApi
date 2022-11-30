@@ -14,7 +14,7 @@ namespace MallMapsApi.Data
         }
 
         /// <summary>
-        /// Get components based on mapid
+        /// GetChildren components based on mapid
         /// </summary>
         /// <param name="mapid"></param>
         /// <returns></returns>

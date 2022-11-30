@@ -1,5 +1,8 @@
+
 ﻿using MallMapsApi.Controllers.Views;
-using MallMapsApi.Data.DTO;
+﻿using MallMapsApi.Data.DTO;
+using System.Data;
+
 
 namespace MallMapsApi.Interface
 {
