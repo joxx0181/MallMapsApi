@@ -28,7 +28,7 @@ namespace MallMapsApi.Data
         {
             string hashPas = Sha256Hash(password);
             mapper = new DataMapper();
-            _crud.Insert(mapper.FirmUserMapper(uName, hashPas, role, firmid));
+            _crud.InsertScalar(mapper.FirmUserMapper(uName, hashPas, role, firmid));
             return "User added";
         }
         /// <summary>

@@ -56,7 +56,7 @@ namespace MallApiUnitTest
             var fakeCrud = A.Fake<ICrudAcess>();
 
             LoginHandler handler = new LoginHandler(fakeCrud);
-            A.CallTo(() => fakeCrud.Insert<FirmUser>(A<FirmUser>.Ignored)).Returns(null);
+            A.CallTo(() => fakeCrud.InsertScalar<FirmUser>(A<FirmUser>.Ignored)).Returns(-1);
             var actual = handler.CreateUser("Admin", "Admin", "Redektør", 10203040);
 
 

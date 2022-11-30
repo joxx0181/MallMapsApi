@@ -1,11 +1,21 @@
 ﻿using MallMapsApi.CustomAttributes;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MallMapsApi.Data.DTO
 {
     [Table(Name = "Map")]
     public class Map
     {
+     
+        [Column(Name = "id", IgnoreSql = true)]
+        public int Id { get; set; }
+
+        [Column(Name = "mallid")]
+        public int MallId { get; set; }
+        public List<Component> Components { get; set; }
+        [Column(Name = "layer")]
+        public int Layer { get; set; }
+
         public Map(int mallId, int layer)
         {
             MallId = mallId;
@@ -13,10 +23,9 @@ namespace MallMapsApi.Data.DTO
             Layer = layer;
         }
 
-        [Column(Name = "mallid")]
-        public int MallId { get; set; }
-        public List<Component> Components { get; set; }
-        [Column(Name = "layer")]
-        public int Layer { get; set; }
+        public Map()
+        {
+
+        }
     }
 }

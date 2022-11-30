@@ -43,7 +43,7 @@ namespace MallMapsApi.Data
             Map map = new Map(mapV.MallID, mapV.Layer);
             foreach (var item in mapV.Components)
             {
-                map.Components.Add(new Component(mapV.Id, null, item.Description, item.CreateGeoDat(), item.ZIndex));
+                map.Components.Add(new Component(-1,null, item.Description, item.CreateGeoDat(), item.ZIndex));
             }
             return map;
         }

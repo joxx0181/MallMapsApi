@@ -4,7 +4,8 @@ namespace MallMapsApi.Interface
 {
     public interface ICrudAcess
     {
-        public BaseEntity Insert<BaseEntity>(BaseEntity baseEntity);
+        public int InsertScalar<BaseEntity>(BaseEntity baseEntity);
+        public int Insert<BaseEntity>(BaseEntity baseEntity);
         public BaseEntity Update<BaseEntity>(BaseEntity baseEntity);
         public BaseEntity Delete<BaseEntity>(BaseEntity baseEntity);
         public IEnumerable<BaseEntity> Get<BaseEntity>();

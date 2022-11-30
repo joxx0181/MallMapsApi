@@ -17,7 +17,16 @@ namespace MallMapsApi.Data
             DataMapper mapper = new DataMapper();
             if (map != null)
             {
-                _crudAcess.Insert<Map>(mapper.MapMapper(map));
+                var mp = mapper.MapMapper(map);
+
+                var id = _crudAcess.InsertScalar<Map>(mp);
+                foreach (var component in mp.Components)
+                {
+                    component.MapID = id;
+                    _crudAcess.Insert<Component>(component);
+                }
+
+
                 return "Completed";
             }
             return "Data was empty";
