@@ -21,8 +21,8 @@ namespace MallApiUnitTest
         public void GetComponents_Mapping_GetByID()
         {
             byte[] fakeimg = new byte[] { 10, 20, 33, 21, 10, 23 };
-            var fakecomponent = new Component(1, 1, fakeimg, "beskrivelse", new SqlGeometry(), 1);
-            var fakecomponent2 = new Component(2, 1, null, null, new SqlGeometry(), 1);
+            var fakecomponent = new Component(1, fakeimg, "beskrivelse", new SqlGeometry(), 1);
+            var fakecomponent2 = new Component(1, null, null, new SqlGeometry(), 1);
             var expected = new IconComponentDecorator(fakecomponent);
             var expected2 = new BasicComponentDecorator(fakecomponent2);
 

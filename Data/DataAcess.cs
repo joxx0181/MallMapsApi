@@ -129,6 +129,9 @@ namespace MallMapsApi.Data
                 con.Close();
         }
 
-
+        public string InsertMap(Map map)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

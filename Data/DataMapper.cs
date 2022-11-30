@@ -1,10 +1,11 @@
 ﻿using MallMapsApi.Controllers.Decorators;
+using MallMapsApi.Controllers.Views;
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Interface;
 
 namespace MallMapsApi.Data
 {
-    public class DataMapper : IMapper
+    public class DataMapper : IDataMapper
     {
         public FirmUser FirmUserMapper(string username, string password, string role, int cvrnr)
         {
@@ -32,6 +33,15 @@ namespace MallMapsApi.Data
                 return componentDict;
 
             return null;
+        }
+        public Map MapMapper(MapV mapV)
+        {
+            Map map = new Map(mapV.MallID, mapV.Layer);
+            foreach (var item in mapV.Components)
+            {
+                map.Components.Add(new Component(mapV.Id, null, item.Description, item.CreateGeoDat(), item.ZIndex));
+            }
+            return map;
         }
     }
 }

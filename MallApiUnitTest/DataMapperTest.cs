@@ -36,8 +36,8 @@ namespace MallApiUnitTest
         {
             byte[] fakeimg = new byte[] { 10, 20, 33, 21, 10, 23 };
 
-            var fakecomponent = new Component(1, 1, fakeimg, "beskrivelse", new SqlGeometry(), 1);
-            var fakecomponent2 = new Component(2, 1, null, null, new SqlGeometry(), 1);
+            var fakecomponent = new Component(1, fakeimg, "beskrivelse", new SqlGeometry(), 1);
+            var fakecomponent2 = new Component(1, null, null, new SqlGeometry(), 1);
 
             var fakeComponentList = new List<Component>();
             fakeComponentList.Add(fakecomponent);

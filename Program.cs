@@ -13,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ICrudAcess, DataAcess>();
 builder.Services.AddScoped<IVerify, LoginHandler>();
 builder.Services.AddScoped<IComponent, ComponentHandler>();
+builder.Services.AddScoped<IMap, MapHandler>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
