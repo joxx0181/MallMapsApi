@@ -1,7 +1,7 @@
-﻿using MallMapsApi.Controllers.Views;
+﻿using MallMapsApi.Controllers.Decorators;
+using MallMapsApi.Controllers.Views;
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Interface;
-using MallMapsApi.Utils;
 
 namespace MallMapsApi.Data
 {
@@ -13,12 +13,21 @@ namespace MallMapsApi.Data
             _crudAcess = crudAcess;
         }
 
-        public string CreateMap(MapV map)
+        public MallMapDecorator CreateMap(MapV map)
         {
             DataMapper mapper = new DataMapper();
             if (map != null)
             {
-                _crudAcess.Insert<Map>(mapper.MapMapper(map));
+                var mp = mapper.MapMapper(map);
+
+                var id = _crudAcess.InsertScalar<Map>(mp);
+                foreach (var component in mp.Components)
+                {
+                    component.MapID = id;
+                    _crudAcess.Insert<Component>(component);
+                }
+
+
                 return "Completed";
             }
             return "Data was empty";
@@ -26,7 +35,7 @@ namespace MallMapsApi.Data
 
         public void GetMapsByLocation(string location)
         {
-            if (location.IsStringNullOrWhiteSpace())
+            throw new NotImplementedException();
         }
     }
 }

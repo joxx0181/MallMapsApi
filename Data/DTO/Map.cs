@@ -13,10 +13,14 @@ namespace MallMapsApi.Data.DTO
             Layer = layer;
         }
 
+        [ForeignKey(Key = "id")]
         [Column(Name = "mallid")]
         public int MallId { get; set; }
+
         public List<Component> Components { get; set; }
+
         [Column(Name = "layer")]
         public int Layer { get; set; }
+        public Mall MallRef { get; set; }
     }
 }
