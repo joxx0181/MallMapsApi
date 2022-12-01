@@ -15,13 +15,15 @@ namespace MallMapsApi.Controllers
         }
 
         [HttpGet("Get")]
-        public IActionResult GetByLocation(string location)
+        public IActionResult GetByLocation(int mallid)
         {
             try
             {
-                _map.GetMapsByLocation(location);
-                return Ok();
+                var res = _map.GetMapsByLocation(mallid);
 
+                if (res == null || res.Count() == 0)
+                    return BadRequest(res);
+                return Ok(res);
             }
             catch (Exception e)
             {
@@ -29,11 +31,6 @@ namespace MallMapsApi.Controllers
             }
         }
 
-        //[HttpPost("Update")]
-        //public IActionResult Update()
-        //{
-        //    return Ok();
-        //}
 
         [HttpPost("Create")]
         public IActionResult Create(MapV map)

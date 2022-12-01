@@ -29,6 +29,9 @@ namespace MallMapsApi.Utils
 
         public static bool IsEnumerableType(PropertyInfo prop)
         {
+            if (prop == null)
+                return false;
+
             Type type = prop.GetType();
             if (typeof(System.Collections.IList).IsAssignableFrom(type))
                 return true;

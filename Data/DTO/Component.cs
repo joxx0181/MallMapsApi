@@ -7,18 +7,8 @@ namespace MallMapsApi.Data.DTO
     [Table(Name = "Components")]
     public class Component
     {
-        public Component(int mapID, byte[] img, string description, SqlGeometry geodata, int zindex)
-        {
-            MapID = mapID;
-            Img = img;
-            Description = description;
-            Geodata = geodata;
-            Zindex = zindex;
-        }
-
 
         [JsonIgnore]
-
         [Column(Name = "id", IgnoreSql = true)]
         public int Id { get; set; }
 
@@ -32,11 +22,27 @@ namespace MallMapsApi.Data.DTO
         public string Description { get; set; }
 
         [Column(Name = "geodata")]
-        public string GetGeoData { get { return Geodata.ToString(); } }
+        public string GetGeoData { get { return Geodata.ToString(); } set => value.ToString(); }
 
         public SqlGeometry Geodata { get; set; }
 
         [Column(Name = "zindex")]
         public int Zindex { get; set; }
+
+
+        public Component(int mapID, byte[] img, string description, SqlGeometry geodata, int zindex)
+        {
+            MapID = mapID;
+            Img = img;
+            Description = description;
+            Geodata = geodata;
+            Zindex = zindex;
+        }
+
+        public Component()
+        {
+
+        }
+
     }
 }

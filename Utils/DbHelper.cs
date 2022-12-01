@@ -235,7 +235,7 @@ namespace MallMapsApi.Utils
                 foreach (var propInfo in propInfos)
                 {
                     //GetChildren ColumName
-                    var columnName = GetColumnName<object>(type , propInfo);
+                    var columnName = GetColumnName<object>(type, propInfo);
                     //Copy fields from Datacolumn to row
                     if (columnName == column.ColumnName)
                         propInfo.SetValue(obj, row[columnName]);
@@ -244,7 +244,7 @@ namespace MallMapsApi.Utils
             //Return generic object of type entity
             return obj;
         }
-        internal static BaseEntity DataRowToBaseEntity<BaseEntity>(DataRow row)
+        internal static BaseEntity DataRowToBaseEntity<BaseEntity>(DataRow row, bool ignoreSql)
         {
             try
             {
@@ -253,7 +253,11 @@ namespace MallMapsApi.Utils
                     throw new ArgumentNullException("Row is null");
                 //Create new instance of type.
                 BaseEntity obj = Activator.CreateInstance<BaseEntity>();
-                var propInfos = obj.GetType().GetProperties().Where(x => x.GetCustomAttribute<Column>() != null && x.GetCustomAttribute<Column>().IgnoreSql == false);
+                IEnumerable<PropertyInfo> propInfos;
+                if (ignoreSql)
+                    propInfos = obj.GetType().GetProperties().Where(x => x.GetCustomAttribute<Column>() != null && x.GetCustomAttribute<Column>().IgnoreSql == false);
+                else
+                    propInfos = obj.GetType().GetProperties().Where(x => x.GetCustomAttribute<Column>() != null);
 
                 //Run through all Columns
                 foreach (DataColumn column in row.Table.Columns)
@@ -291,7 +295,7 @@ namespace MallMapsApi.Utils
 
 
         }
-        internal static IEnumerable<BaseEntity> ConvertToBaseEntity<BaseEntity>(DataTable table)
+        internal static IEnumerable<BaseEntity> ConvertToBaseEntity<BaseEntity>(DataTable table, bool ignoreSql)
         {
             try
             {
@@ -301,7 +305,7 @@ namespace MallMapsApi.Utils
 
                 foreach (DataRow row in table.Rows)
                 {
-                    var entity = DataRowToBaseEntity<BaseEntity>(row);
+                    var entity = DataRowToBaseEntity<BaseEntity>(row, ignoreSql);
                     if (entity != null)
                         entities.Add(entity);
                 }

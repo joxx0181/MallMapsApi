@@ -33,9 +33,14 @@ namespace MallMapsApi.Data
             return "Data was empty";
         }
 
-        public void GetMapsByLocation(string location)
+        public IEnumerable<Map> GetMapsByLocation(int mallid)
         {
-            throw new NotImplementedException();
+            IEnumerable<Map> map = _crudAcess.Get<Map>().Where(x => x.MallId == mallid);
+            foreach (var item in map)
+            {
+                item.Components.AddRange(_crudAcess.Get<Component>().Where(z => z.MapID == item.Id));
+            }
+            return map;
         }
     }
 }

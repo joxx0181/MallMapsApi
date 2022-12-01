@@ -1,13 +1,10 @@
 ﻿using MallMapsApi.Interface;
 using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using MallMapsApi.Data.DTO;
 using MallMapsApi.Utils;
 using System.Data;
 using MallMapsApi.CustomAttributes;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Text;
+using Microsoft.SqlServer.Types;
 
 namespace MallMapsApi.Data
 {
@@ -45,7 +42,7 @@ namespace MallMapsApi.Data
                 {
                     var dataTable = new DataTable();
                     dataTable.Load(reader);
-                    var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(dataTable);
+                    var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(dataTable, false);
 
                     return entities;
                 }
@@ -94,11 +91,18 @@ namespace MallMapsApi.Data
             {
                 OpenConnection();
                 var cmd = con.CreateCommand();
-                cmd.CommandText = $"SELECT * FROM {typeof(BaseEntity).Name}";
+                cmd.CommandText = $"SELECT * FROM {typeof(BaseEntity).GetCustomAttribute<Table>().Name}";
+             
+                AppDomain.CurrentDomain.SetData("System.Data.DataSetDefaultAllowedTypes", typeof(SqlGeography));
                 DataTable data = new DataTable();
-                SqlDataReader reader = cmd.ExecuteReader();
-                data.Load(reader);
-                var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(data);
+                //SqlDataReader reader = cmd.ExecuteReader();
+                data.Columns.Add("SpatialData", typeof(System.Data.SqlTypes.SqlBytes));
+                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+                sqlDataAdapter.Fill(data);
+
+                //if (reader.GetFieldType("geodata") != null)
+                //data.Load(reader);
+                var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(data, false);
 
                 foreach (var en in entities)
                 {
@@ -130,6 +134,10 @@ namespace MallMapsApi.Data
                     continue;
 
                 var refProp = entity.GetType().GetProperty(prop.Name + "Ref");
+
+                if (refProp == null)
+                    continue;
+
                 if (DataHelper.IsEnumerableType(refProp))
                     refProp.SetValue(entity, GetChildren(refProp.PropertyType));
                 else
