@@ -1,6 +1,7 @@
 ﻿using MallMapsApi.CustomAttributes;
 using Microsoft.SqlServer.Types;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace MallMapsApi.Data.DTO
 {
@@ -22,8 +23,19 @@ namespace MallMapsApi.Data.DTO
         public string Description { get; set; }
 
         [Column(Name = "geodata")]
-        public string GetGeoData { get { return Geodata.ToString(); } set => value.ToString(); }
+        public string GetGeoData 
+        { 
+            get 
+            { 
+                return Geodata.ToString(); 
+            } 
+            set 
+            {
+                Geodata =  SqlGeometry.Parse(value);        
+            }
+        }
 
+        [JsonIgnore]
         public SqlGeometry Geodata { get; set; }
 
         [Column(Name = "zindex")]

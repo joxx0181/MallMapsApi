@@ -148,7 +148,7 @@ namespace MallMapsApi.Utils
                     throw new ArgumentNullException("entity is null");
                 //We should not recieve and propertyInfo with ignoreSql here
                 if (info.GetCustomAttribute<Column>().IgnoreSql == true)
-                    throw new Exception("GetColumnName : Custom attribute Ignoresql found.");
+                    return string.Empty;
                 //Chceks if parameter is set.
                 if (frontChar == default(char))
                     return $"{info.GetCustomAttribute<Column>().Name}";
@@ -267,9 +267,12 @@ namespace MallMapsApi.Utils
                     {
                         //GetChildren ColumName
                         var columnName = GetColumnName<BaseEntity>(obj, propInfo);
+                        if (columnName.IsStringNullOrWhiteSpace())
+                            continue;
                         //Copy fields from Datacolumn to row
                         if (columnName == column.ColumnName)
                             propInfo.SetValue(obj, row[columnName]);
+
                     }
                 }
                 //Return generic object of type entity
@@ -306,8 +309,9 @@ namespace MallMapsApi.Utils
                 foreach (DataRow row in table.Rows)
                 {
                     var entity = DataRowToBaseEntity<BaseEntity>(row, ignoreSql);
-                    if (entity != null)
-                        entities.Add(entity);
+                    if (entity == null)
+                        continue;
+                    entities.Add(entity);
                 }
                 return entities;
 

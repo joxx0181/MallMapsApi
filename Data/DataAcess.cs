@@ -4,7 +4,7 @@ using MallMapsApi.Utils;
 using System.Data;
 using MallMapsApi.CustomAttributes;
 using System.Reflection;
-using Microsoft.SqlServer.Types;
+
 
 namespace MallMapsApi.Data
 {
@@ -13,10 +13,12 @@ namespace MallMapsApi.Data
 
         private readonly IConfiguration _configuration;
         private SqlConnection con;
+
         public DataAcess(IConfiguration configuration)
         {
             _configuration = configuration;
             con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
         }
 
 
@@ -91,17 +93,14 @@ namespace MallMapsApi.Data
             {
                 OpenConnection();
                 var cmd = con.CreateCommand();
-                cmd.CommandText = $"SELECT * FROM {typeof(BaseEntity).GetCustomAttribute<Table>().Name}";
-             
-                AppDomain.CurrentDomain.SetData("System.Data.DataSetDefaultAllowedTypes", typeof(SqlGeography));
-                DataTable data = new DataTable();
-                //SqlDataReader reader = cmd.ExecuteReader();
-                data.Columns.Add("SpatialData", typeof(System.Data.SqlTypes.SqlBytes));
-                SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
-                sqlDataAdapter.Fill(data);
 
-                //if (reader.GetFieldType("geodata") != null)
-                //data.Load(reader);
+                cmd.CommandText = $"SELECT * FROM {typeof(BaseEntity).GetCustomAttribute<Table>().Name}";
+                DataTable data = new DataTable();
+                DataSet dataSet = new DataSet();
+                SqlDataReader reader = cmd.ExecuteReader();
+                data.Load(reader);
+
+
                 var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(data, false);
 
                 foreach (var en in entities)
@@ -122,6 +121,37 @@ namespace MallMapsApi.Data
             }
         }
 
+        public IEnumerable<BaseEntity> GetByProcedure<BaseEntity>(string procedure)
+        {
+            try
+            {
+                OpenConnection();
+                if (procedure.IsStringNullOrWhiteSpace())
+                    return new HashSet<BaseEntity>();
+                var cmd = con.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = procedure;
+                DataTable data = new DataTable();
+                DataSet dataSet = new DataSet();
+                SqlDataReader reader = cmd.ExecuteReader();
+                data.Load(reader);
+                var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(data, true);
+                foreach (var entity in entities)
+                {
+                    JoinOnGet<BaseEntity>(entity);
+                }
+                return entities;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
 
         public void JoinOnGet<BaseEntity>(BaseEntity entity)
         {
@@ -255,5 +285,7 @@ namespace MallMapsApi.Data
                 CloseConnection();
             }
         }
+
+
     }
 }

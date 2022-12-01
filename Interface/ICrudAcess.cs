@@ -15,6 +15,7 @@ namespace MallMapsApi.Interface
         public void UpdateSession(string session, int sessionID);
         public void OpenConnection();
         public void CloseConnection();
+        public IEnumerable<BaseEntity> GetByProcedure<BaseEntity>(string procedure);
 
     }
 }
