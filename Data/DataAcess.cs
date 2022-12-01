@@ -102,7 +102,7 @@ namespace MallMapsApi.Data
 
                 foreach (var en in entities)
                 {
-                    Join<BaseEntity>(en);
+                    JoinOnGet<BaseEntity>(en);
                 }
                 return entities;
 
@@ -119,7 +119,7 @@ namespace MallMapsApi.Data
         }
 
 
-        public void Join<BaseEntity>(BaseEntity entity)
+        public void JoinOnGet<BaseEntity>(BaseEntity entity)
         {
             var classProperties = entity.GetType().GetProperties().Where(x => x.GetCustomAttribute<ForeignKey>() != null && x.GetType().IsClass);
             foreach (var prop in classProperties)
@@ -130,32 +130,46 @@ namespace MallMapsApi.Data
                     continue;
 
                 var refProp = entity.GetType().GetProperty(prop.Name + "Ref");
-
-                var pair = GetChildren(refProp.PropertyType).FirstOrDefault();
-
-                refProp.SetValue(entity, pair);
-
+                if (DataHelper.IsEnumerableType(refProp))
+                    refProp.SetValue(entity, GetChildren(refProp.PropertyType));
+                else
+                    refProp.SetValue(entity, GetChildren(refProp.PropertyType).FirstOrDefault());
             }
         }
 
-        public BaseEntity Insert<BaseEntity>(BaseEntity baseEntity)
+        public int InsertScalar<BaseEntity>(BaseEntity baseEntity)
         {
             try
             {
                 OpenConnection();
 
-
+                //todo : 
                 SqlCommand cmd = DbHelper.BuildInsert<BaseEntity>(baseEntity, con.CreateCommand());
-
-                if (cmd.ExecuteNonQuery() > 0)
-                    return baseEntity;
-
-
-                return default(BaseEntity);
+                cmd.CommandText += "; Select SCOPE_IDENTITY()";
+                return int.Parse(cmd.ExecuteScalar().ToString());
             }
             catch (Exception ex)
             {
-                return default(BaseEntity);
+                return -1;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+        public int Insert<BaseEntity>(BaseEntity baseEntity)
+        {
+            try
+            {
+                OpenConnection();
+
+                //todo : 
+                SqlCommand cmd = DbHelper.BuildInsert<BaseEntity>(baseEntity, con.CreateCommand());
+                return int.Parse(cmd.ExecuteNonQuery().ToString());
+            }
+            catch (Exception ex)
+            {
+                return -1;
             }
             finally
             {

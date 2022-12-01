@@ -1,4 +1,5 @@
 ﻿using Microsoft.SqlServer.Types;
+using System.Reflection;
 
 namespace MallMapsApi.Utils
 {
@@ -26,7 +27,18 @@ namespace MallMapsApi.Utils
             return false;
         }
 
+        public static bool IsEnumerableType(PropertyInfo prop)
+        {
+            Type type = prop.GetType();
+            if (typeof(System.Collections.IList).IsAssignableFrom(type))
+                return true;
 
+            foreach (var it in type.GetInterfaces())
+                if (it.IsGenericType && typeof(IList<>) == it.GetGenericTypeDefinition())
+                    return true;
 
+            return false;
+
+        }
     }
 }

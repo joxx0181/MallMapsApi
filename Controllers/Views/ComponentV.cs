@@ -1,5 +1,5 @@
 ﻿using Microsoft.SqlServer.Types;
-
+using System.Text.Json.Serialization;
 
 namespace MallMapsApi.Controllers.Views
 {
@@ -11,11 +11,9 @@ namespace MallMapsApi.Controllers.Views
             ZIndex = zIndex;
             GeoData = geodata;
         }
-
         public string Description { get; set; }
         public int ZIndex { get; set; }
         public GeodataV GeoData { get; set; }
-
         public SqlGeometry CreateGeoDat()
         {
             var test = SqlGeometry.STGeomFromText(GeoData.SqlCharBuilder(), GeoData.Srid);

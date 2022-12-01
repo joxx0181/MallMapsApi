@@ -32,6 +32,8 @@ namespace MallMapsApi.Data.DTO
         public string Description { get; set; }
 
         [Column(Name = "geodata")]
+        public string GetGeoData { get { return Geodata.ToString(); } }
+
         public SqlGeometry Geodata { get; set; }
 
         [Column(Name = "zindex")]

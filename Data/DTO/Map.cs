@@ -1,5 +1,5 @@
 ﻿using MallMapsApi.CustomAttributes;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MallMapsApi.Data.DTO
 {

@@ -314,19 +314,6 @@ namespace MallMapsApi.Utils
             }
         }
 
-        /// <summary>
-        /// Check if Propertyinfo is contains CustomAttribute and if it valid
-        /// </summary>
-        /// <param name="prop"></param>
-        /// <returns></returns>
-        internal static bool ValidateCustomAttribute(PropertyInfo prop)
-        {
-            if (prop.GetCustomAttribute<Column>() is Column column && column.IgnoreSql == false)
-                return true;
-            else if (prop.GetCustomAttribute<Table>() is Table)
-                return true;
-            return false;
-        }
 
     }
 }
