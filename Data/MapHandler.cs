@@ -13,7 +13,7 @@ namespace MallMapsApi.Data
             _crudAcess = crudAcess;
         }
 
-        public MallMapDecorator CreateMap(MapV map)
+        public string CreateMap(MapV map)
         {
             DataMapper mapper = new DataMapper();
             if (map != null)

@@ -6,6 +6,6 @@ namespace MallMapsApi.Interface
     public interface IMap
     {
         public void GetMapsByLocation(string location);
-        public MallMapDecorator CreateMap(MapV map);
+        public string CreateMap(MapV map);
     }
 }
