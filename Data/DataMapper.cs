@@ -47,20 +47,11 @@ namespace MallMapsApi.Data
             //Run through each component
             for (int i = 0; i < components.Count; i++)
             {
-
-                //TODO :
-                var geoType = DataHelper.GetGeoType(components[i].Geodata);
-                var xyDict = DataHelper.GetXYFromGeo(components[i].Geodata);
-                var x = xyDict["XPos"];
-                var y = xyDict["XPos"];
-
-                GeodataV geoV = new GeodataV(geoType, x, y, (Int32)components[i].Geodata.STSrid);
-
                 //check if image is null
                 if (components[i].Img != null) //if not null decorate IconComponent
-                    componentDict.Add("IconComponent", new IconComponentDecorator(components[i], geoV));
+                    componentDict.Add("IconComponent", new IconComponentDecorator(components[i], GeoDataMapper(components[i].Geodata)));
                 else //create basic component 
-                    componentDict.Add("BasicComponent", new BasicComponentDecorator(components[i], geoV));
+                    componentDict.Add("BasicComponent", new BasicComponentDecorator(components[i], GeoDataMapper(components[i].Geodata)));
             }
             //if any component dic return dictionary
             if (componentDict.Count > 0)
@@ -88,7 +79,11 @@ namespace MallMapsApi.Data
 
         public GeodataV GeoDataMapper(SqlGeometry geo)
         {
-            throw new NotImplementedException();
+            var geoType = DataHelper.GetGeoType(geo);
+            var xyDict = DataHelper.GetXYFromGeo(geo);
+            var x = xyDict["XPos"];
+            var y = xyDict["XPos"];
+            return new GeodataV(geoType, x, y, (Int32)geo.STSrid);
         }
 
         /// <summary>
