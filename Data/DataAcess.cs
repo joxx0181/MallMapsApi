@@ -84,7 +84,7 @@ namespace MallMapsApi.Data
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private IEnumerable<object> GetChildren(Type type = default(Type))
+        private IEnumerable<object> GetChildren(bool ignoreSql,Type type = default(Type))
         {
             try
             {
@@ -104,7 +104,7 @@ namespace MallMapsApi.Data
                 //load all data from reader into datatable 
                 data.Load(reader);
                 //Convert DataTable to list of objects and return it 
-                return DbHelper.ConvertToBaseEntity(data, type);
+                return DbHelper.ConvertToBaseEntity(ignoreSql,data, type);
             }
             catch (Exception ex)
             {
@@ -236,9 +236,9 @@ namespace MallMapsApi.Data
                     continue;
                 //if refprop is an type of collection then we want to set all into the property 
                 if (DataHelper.IsEnumerableType(refProp))
-                    refProp.SetValue(entity, GetChildren(refProp.PropertyType));
+                    refProp.SetValue(entity, GetChildren(true,refProp.PropertyType));
                 else //if nots an property of an object we only want the first match.
-                    refProp.SetValue(entity, GetChildren(refProp.PropertyType).FirstOrDefault());
+                    refProp.SetValue(entity, GetChildren(true,refProp.PropertyType).FirstOrDefault());
             }
         }
 

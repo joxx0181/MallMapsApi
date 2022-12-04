@@ -90,9 +90,9 @@ namespace MallMapsApi.Utils
                         continue;
                     //add paramaters to prevent sql injection
                     if (propInfo.GetValue(baseEntity) is null)
-                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(baseEntity, propInfo), -1);
+                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(baseEntity,propInfo,true), -1);
                     else
-                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(baseEntity, propInfo, '@'), GetPropertyValue<BaseEntity>(baseEntity, propInfo));
+                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(baseEntity, propInfo,true, '@'), GetPropertyValue<BaseEntity>(baseEntity, propInfo));
                 }
             }
 
@@ -145,7 +145,7 @@ namespace MallMapsApi.Utils
         /// <param name="frontChar">Puts an char in front of the row name</param>
         /// <returns>string value of row name with or without frontchar</returns>
         /// <exception cref="ArgumentNullException">Throw on nulls, No customattribute, customAttribute with IgnoreSql == true</exception>
-        internal static string GetColumnName<Entity>(Entity entity, PropertyInfo info, char frontChar = default(char))
+        internal static string GetColumnName<Entity>(Entity entity, PropertyInfo info,bool ignoresql, char frontChar = default(char))
         {
             try
             {
@@ -156,7 +156,7 @@ namespace MallMapsApi.Utils
                 if (info.GetCustomAttribute<Column>() is Column column)
                 {
                     //check if ignoreSql i set, if true return empty string
-                    if (column.IgnoreSql == true)
+                    if (column.IgnoreSql == true && ignoresql == true)
                         return string.Empty;
 
                     //if frontchar is default return without adding char infron of the string.
@@ -235,7 +235,7 @@ namespace MallMapsApi.Utils
         /// <param name="type">Type u want back</param>
         /// <returns>Object of type parsed</returns>
         /// <exception cref="ArgumentNullException">Return null execptions</exception>
-        internal static object DataRowToObject(DataRow row, Type type)
+        internal static object DataRowToObject(bool ignoreSql,DataRow row, Type type)
         {
             //If datarow entered is null, throw null execption
             if (row == null)
@@ -254,7 +254,7 @@ namespace MallMapsApi.Utils
                 foreach (var objPropInfo in objPropertyInfos)
                 {
                     //GetChildren ColumName
-                    var columnName = GetColumnName<object>(type, objPropInfo);
+                    var columnName = GetColumnName<object>(type, objPropInfo,ignoreSql);
                     //Copy fields from Datacolumn to row
                     if (columnName == column.ColumnName)
                         objPropInfo.SetValue(obj, row[columnName]);
@@ -297,7 +297,7 @@ namespace MallMapsApi.Utils
                     foreach (var propInfo in propInfos)
                     {
                         //GetChildren ColumNames
-                        var columnName = GetColumnName<BaseEntity>(obj, propInfo);
+                        var columnName = GetColumnName<BaseEntity>(obj, propInfo,ignoreSql);
                         //Get Column names 
                         if (columnName.IsStringNullOrWhiteSpace())
                             continue;
@@ -322,7 +322,7 @@ namespace MallMapsApi.Utils
         /// <param name="table"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        internal static IEnumerable<object> ConvertToBaseEntity(DataTable table, Type type = default(Type))
+        internal static IEnumerable<object> ConvertToBaseEntity(bool ignoreSql,DataTable table, Type type = default(Type))
         {
             //Creating an list of objects
             List<object> entities = new List<object>();
@@ -330,7 +330,7 @@ namespace MallMapsApi.Utils
             foreach (DataRow row in table.Rows)
             {
                 //Converting DataRwo to object 
-                var entity = DataRowToObject(row, type);
+                var entity = DataRowToObject(ignoreSql,row, type);
                 //Adding eneity to list if not null
                 if (entity != null)
                     entities.Add(entity);
