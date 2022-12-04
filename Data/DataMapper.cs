@@ -6,6 +6,7 @@ using MallMapsApi.Interface;
 using MallMapsApi.Utils;
 using Microsoft.SqlServer.Types;
 using System.Data;
+using System.Drawing;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using Xunit.Sdk;
@@ -46,13 +47,20 @@ namespace MallMapsApi.Data
             //Run through each component
             for (int i = 0; i < components.Count; i++)
             {
-               
-                //TODO : GeodataV v = new GeodataV();
+
+                //TODO :
+                var geoType = DataHelper.GetGeoType(components[i].Geodata);
+                var xyDict = DataHelper.GetXYFromGeo(components[i].Geodata);
+                var x = xyDict["XPos"];
+                var y = xyDict["XPos"];
+
+                GeodataV geoV = new GeodataV(geoType, x, y, (Int32)components[i].Geodata.STSrid);
+
                 //check if image is null
                 if (components[i].Img != null) //if not null decorate IconComponent
-                    componentDict.Add("IconComponent", new IconComponentDecorator(components[i], null));
+                    componentDict.Add("IconComponent", new IconComponentDecorator(components[i], geoV));
                 else //create basic component 
-                    componentDict.Add("BasicComponent", new BasicComponentDecorator(components[i], null));
+                    componentDict.Add("BasicComponent", new BasicComponentDecorator(components[i], geoV));
             }
             //if any component dic return dictionary
             if (componentDict.Count > 0)

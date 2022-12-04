@@ -1,5 +1,7 @@
 ﻿using Microsoft.SqlServer.Types;
+using System.Drawing;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace MallMapsApi.Utils
 {
@@ -64,6 +66,30 @@ namespace MallMapsApi.Utils
             //Return false if none of the above is true
             return false;
 
+        }
+
+
+        internal static string GetGeoType(SqlGeometry sqlGeo)
+        {
+            return Regex.Match(sqlGeo.ToString(), @"[A-z]+").Value;
+        }
+        internal static Dictionary<string, int[]> GetXYFromGeo(SqlGeometry sqlGeo)
+        {
+            Dictionary<string, int[]> _XYvalues = new Dictionary<string, int[]>();
+
+            List<int> x = new List<int>();
+            List<int> y = new List<int>();
+            for (int i = 0; i < sqlGeo.STNumPoints(); i++)
+            {
+                var matchCollection = Regex.Matches(sqlGeo.STPointN(i).ToString(), @"(\d+)");
+                x.Add(int.Parse(matchCollection[0].Value));
+                y.Add(int.Parse(matchCollection[1].Value));
+            }
+
+            _XYvalues.Add("XPos", x.ToArray());
+            _XYvalues.Add("YPos", y.ToArray());
+
+            return _XYvalues;
         }
     }
 }
