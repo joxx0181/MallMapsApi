@@ -1,35 +1,23 @@
-﻿using MallMapsApi.Data.DTO;
+﻿using MallMapsApi.Controllers.Views;
+using MallMapsApi.Data.DTO;
 using Microsoft.SqlServer.Types;
 namespace MallMapsApi.Controllers.Decorators
 {
-    public class IconComponentDecorator
+    public class IconComponentDecorator : BaseComponentDecorator
     {
-        private Component _component;
+        public IconComponentDecorator(Component _component, GeodataV geodataV) : base(_component, geodataV)
+        {
+        }
 
-        public IconComponentDecorator(Component component)
-        {
-            _component = component;
-        }
-        public int MapID 
-        {
-           get { return _component.MapID; }
-        }
-        public SqlGeometry GeoData
-        {
-            get { return _component.Geodata; }
-        }
         public byte[] Image
         {
-            get { return _component.Img; }
+            get { return component.Img; }
         }
         public string Description
         {
-            get { return _component.Description; }
+            get { return component.Description; }
         }
-        public int Zindex
-        {
-            get { return _component.Zindex; }
-        }
+   
 
     }
 }

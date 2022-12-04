@@ -1,26 +1,15 @@
-﻿using MallMapsApi.Data.DTO;
+﻿using MallMapsApi.Controllers.Views;
+using MallMapsApi.Data.DTO;
 using Microsoft.SqlServer.Types;
 namespace MallMapsApi.Controllers.Decorators
 {
-    public class BasicComponentDecorator
+    public class BasicComponentDecorator : BaseComponentDecorator
     {
-        private Component _component;
+        
+        public BasicComponentDecorator(Component _component, GeodataV geodataV) : base(_component, geodataV)
+        {
 
-        public BasicComponentDecorator(Component component)
-        {
-            _component = component;
         }
-        public int MapId
-        {
-            get { return _component.MapID; }
-        }
-        public SqlGeometry GeoData
-        {
-            get { return _component.Geodata; }
-        }
-        public int Zindex
-        {
-            get { return _component.Zindex; }
-        }
+
     }
 }

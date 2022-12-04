@@ -16,8 +16,7 @@ namespace MallMapsApi.Controllers.Views
         public GeodataV GeoData { get; set; }
         public SqlGeometry CreateGeoDat()
         {
-            var test = SqlGeometry.STGeomFromText(GeoData.SqlCharBuilder(), GeoData.Srid);
-            return test;
+            return SqlGeometry.STGeomFromText(GeoData.SqlCharBuilder(), GeoData.Srid);
         }
 
     }

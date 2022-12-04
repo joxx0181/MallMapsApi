@@ -4,6 +4,7 @@ using MallMapsApi.CustomAttributes;
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Interface;
 using MallMapsApi.Utils;
+using Microsoft.SqlServer.Types;
 using System.Data;
 using System.Reflection;
 
@@ -28,10 +29,11 @@ namespace MallMapsApi.Data
                 return null;
             for (int i = 0; i < components.Count; i++)
             {
-                if (components[i].Img != null)
-                    componentDict.Add("IconComponent", new IconComponentDecorator(components[i]));
+                //TODO : GeodataV v = new GeodataV();
+                if (components[i].Img != null) 
+                    componentDict.Add("IconComponent", new IconComponentDecorator(components[i],  null));
                 else
-                    componentDict.Add("BasicComponent", new BasicComponentDecorator(components[i]));
+                    componentDict.Add("BasicComponent", new BasicComponentDecorator(components[i], null));
             }
             if (componentDict.Count > 0)
                 return componentDict;
@@ -48,5 +50,10 @@ namespace MallMapsApi.Data
             return map;
         }
 
+        public GeodataV MapMapper(SqlGeometry geo)
+        {
+            //geo.ToString()
+            //new GeodataV( ,srid: geo.STSrid);
+        }
     }
 }
