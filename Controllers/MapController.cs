@@ -47,10 +47,5 @@ namespace MallMapsApi.Controllers
                 return BadRequest("Exception was hit: " + e.Message);
             }
         }
-        //[HttpDelete("Delete")]
-        //public IActionResult Delete()
-        //{
-        //    return Ok();
-        //}
     }
 }

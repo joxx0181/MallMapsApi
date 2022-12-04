@@ -8,7 +8,7 @@ namespace MallMapsApi.Data.DTO
     {
 
         [JsonIgnore]
-        [Column(Name = "id")]
+        [Column(Name = "id",IgnoreSql = true)]
         public int Id { get; set; }
 
         [ForeignKey(Key = "id")]
