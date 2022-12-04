@@ -15,7 +15,7 @@ namespace MallMapsApi.Utils
         /// <returns>bool</returns>
         internal static bool IsStringNullOrWhiteSpace(this string str)
         {
-            if (string.IsNullOrWhiteSpace(str) || string.IsNullOrEmpty(str))
+            if (string.IsNullOrWhiteSpace(str))
                 return true;
             return false;
         }
@@ -25,7 +25,7 @@ namespace MallMapsApi.Utils
         /// </summary>
         /// <param name="cvrnr"></param>
         /// <returns></returns>
-        internal static bool CVRNRIsValid(int cvrnr)
+        internal static bool CVRIsNotValid(int cvrnr)
         {
             //if less then 1 return true
             if (cvrnr < 1)

@@ -78,11 +78,35 @@ namespace MallMapsApi.Data
             return map;
         }
 
-        //TODO : 
-        public GeodataV MapMapper(SqlGeometry geo)
+        public GeodataV GeoDataMapper(SqlGeometry geo)
         {
-            
-            return null;
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns a mall object
+        /// </summary>
+        /// <param name="firmid"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public Mall MallMapper(int firmid, string location)
+        {
+            Mall mall = new Mall(-1, firmid, location);
+            return mall;
+        }
+        /// <summary>
+        /// Maps all the malls in the Enumerable to list of MallDecorators
+        /// </summary>
+        /// <param name="malls"></param>
+        /// <returns></returns>
+        public List<MallDecorator> DecoratorMallMapper(IEnumerable<Mall> malls)
+        {
+            List<MallDecorator> decorators = new List<MallDecorator>();
+            foreach (var mall in malls)
+            {
+                decorators.Add(new MallDecorator(mall));
+            }
+            return decorators;
         }
     }
 }

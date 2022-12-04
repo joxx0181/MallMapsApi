@@ -44,7 +44,7 @@ namespace MallMapsApi.Controllers
         {
             try
             {
-                if (username.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace() || role.IsStringNullOrWhiteSpace() || DataHelper.CVRNRIsValid(firmid))
+                if (username.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace() || role.IsStringNullOrWhiteSpace() || DataHelper.CVRIsNotValid(firmid))
                     return BadRequest("Values was not inserted correct");
                 
 

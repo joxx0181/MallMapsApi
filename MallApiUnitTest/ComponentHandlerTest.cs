@@ -23,8 +23,8 @@ namespace MallApiUnitTest
             byte[] fakeimg = new byte[] { 10, 20, 33, 21, 10, 23 };
             var fakecomponent = new Component(1, fakeimg, "beskrivelse", new SqlGeometry(), 1);
             var fakecomponent2 = new Component(1, null, null, new SqlGeometry(), 1);
-            var expected = new IconComponentDecorator(fakecomponent);
-            var expected2 = new BasicComponentDecorator(fakecomponent2);
+            var expected = new IconComponentDecorator(fakecomponent,null);
+            var expected2 = new BasicComponentDecorator(fakecomponent2,null);
 
             var components = new List<Component>();
             components.Add(fakecomponent);
@@ -43,7 +43,7 @@ namespace MallApiUnitTest
 
             Assert.Equal(expected.GeoData, item1.GeoData);
             Assert.Equal(expected.Image, item1.Image);
-            Assert.Equal(expected.MapID, item1.MapID);
+            Assert.Equal(expected.MapId, item1.MapId);
             Assert.Equal(expected.Description, item1.Description);
             Assert.Equal(expected.Zindex, item1.Zindex);
 

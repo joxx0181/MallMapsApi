@@ -5,8 +5,8 @@ namespace MallMapsApi.Data.DTO
     public class Mall
     {
 
-
-        [Column(Name = "id")]
+        
+        [Column(Name = "id",IgnoreSql = true)]
         public int Id { get; set; }
 
         [Column(Name = "firmid")]

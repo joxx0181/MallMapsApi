@@ -2,11 +2,6 @@
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Data;
 using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MallApiUnitTest
 {
@@ -43,8 +38,8 @@ namespace MallApiUnitTest
             fakeComponentList.Add(fakecomponent);
             fakeComponentList.Add(fakecomponent2);
 
-            var expectedFakeComponentDecorator = new IconComponentDecorator(fakecomponent);
-            var expectedFakeComponentDecorator2 = new BasicComponentDecorator(fakecomponent2);
+            var expectedFakeComponentDecorator = new IconComponentDecorator(fakecomponent,null);
+            var expectedFakeComponentDecorator2 = new BasicComponentDecorator(fakecomponent2,null);
 
             DataMapper dataMapper = new DataMapper();
             var actual = dataMapper.ComponentMapper(fakeComponentList);
@@ -54,7 +49,7 @@ namespace MallApiUnitTest
 
             Assert.Equal(expectedFakeComponentDecorator.GeoData, item1.GeoData);
             Assert.Equal(expectedFakeComponentDecorator.Image, item1.Image);
-            Assert.Equal(expectedFakeComponentDecorator.MapID, item1.MapID);
+            Assert.Equal(expectedFakeComponentDecorator.MapId, item1.MapId);
             Assert.Equal(expectedFakeComponentDecorator.Description, item1.Description);
             Assert.Equal(expectedFakeComponentDecorator.Zindex, item1.Zindex);
 
