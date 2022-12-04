@@ -1,4 +1,5 @@
-﻿using MallMapsApi.Controllers.Views;
+﻿using MallMapsApi.Controllers.Decorators;
+using MallMapsApi.Controllers.Views;
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Interface;
 
@@ -54,13 +55,14 @@ namespace MallMapsApi.Data
         /// </summary>
         /// <param name="mallid">id for the mall</param>
         /// <returns></returns>
-        public IEnumerable<Map> GetMapsByLocation(int mallid)
+        public List<MallMapDecorator> GetMapsByLocation(int mallid)
         {
+            DataMapper mapper = new DataMapper();
             ///Get maps from databases where mallID match
             IEnumerable<Map> maps = _crudAcess.Get<Map>().Where(x => x.MallId == mallid);
             //if not there is any maps return empty list
             if (!maps.Any())
-                return Enumerable.Empty<Map>();
+                return new List<MallMapDecorator>();
 
             //loop through each map 
             foreach (var map in maps)
@@ -75,7 +77,7 @@ namespace MallMapsApi.Data
                 map.MallRef = _crudAcess.Get<Mall>().FirstOrDefault(x => x.Id == mallid) ?? default(Mall);
             }
             //return map
-            return maps;
+            return mapper.DecoratorMallMapMapper(maps);
         }
     }
 }

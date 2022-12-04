@@ -16,5 +16,6 @@ namespace MallMapsApi.Interface
         public GeodataV GeoDataMapper(SqlGeometry geo);
         public Mall MallMapper(int firmid, string location);
         public List<MallDecorator> DecoratorMallMapper(IEnumerable<Mall> malls);
+        public List<MallMapDecorator> DecoratorMallMapMapper(IEnumerable<Map> maps);
     }
 }

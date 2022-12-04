@@ -13,12 +13,15 @@ namespace MallMapsApi.Controllers.Decorators
             _Map = map;
         }
 
-        public int Etage
+        public int Layer
         {
             get { return _Map.Layer; }
         }
 
-        public Dictionary<string,object> Components { get { return DataMapper.ComponentMapper(_Map.Components); } }
+        public Dictionary<string,object> Components
+        {
+            get { return DataMapper.ComponentMapper(_Map.Components); } 
+        }
 
 
     }

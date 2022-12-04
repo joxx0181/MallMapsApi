@@ -38,10 +38,11 @@ namespace MallMapsApi.Data
         /// <returns></returns>
         public Dictionary<string, object> ComponentMapper(List<Component> components)
         {
+            List<IconComponentDecorator> iconComponents = new List<IconComponentDecorator>();
+            List<BasicComponentDecorator> basicComponents = new List<BasicComponentDecorator>();
             //if components is null return null
             if (components == null)
                 return null;
-
             //CReating an dictionary 
             Dictionary<string, object> componentDict = new Dictionary<string, object>();
             //Run through each component
@@ -49,10 +50,12 @@ namespace MallMapsApi.Data
             {
                 //check if image is null
                 if (components[i].Img != null) //if not null decorate IconComponent
-                    componentDict.Add("IconComponent", new IconComponentDecorator(components[i], GeoDataMapper(components[i].Geodata)));
+                    iconComponents.Add(new IconComponentDecorator(components[i], GeoDataMapper(components[i].Geodata)));
                 else //create basic component 
-                    componentDict.Add("BasicComponent", new BasicComponentDecorator(components[i], GeoDataMapper(components[i].Geodata)));
+                    basicComponents.Add(new BasicComponentDecorator(components[i], GeoDataMapper(components[i].Geodata)));
             }
+            componentDict.Add("IconComponent",iconComponents);
+            componentDict.Add("BasicComponent", basicComponents);
             //if any component dic return dictionary
             if (componentDict.Count > 0)
                 return componentDict;
@@ -108,6 +111,21 @@ namespace MallMapsApi.Data
             foreach (var mall in malls)
             {
                 decorators.Add(new MallDecorator(mall));
+            }
+            return decorators;
+        }
+        /// <summary>
+        /// Maps all the maps in  the Enumerable to list of MallMapDecorators
+        /// </summary>
+        /// <param name="maps"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public List<MallMapDecorator> DecoratorMallMapMapper(IEnumerable<Map> maps)
+        {
+            List<MallMapDecorator> decorators = new List<MallMapDecorator>();
+            foreach (var map in maps)
+            {
+                decorators.Add(new MallMapDecorator(map));
             }
             return decorators;
         }

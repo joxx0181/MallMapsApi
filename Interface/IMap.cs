@@ -6,7 +6,7 @@ namespace MallMapsApi.Interface
 {
     public interface IMap
     {
-        public IEnumerable<Map> GetMapsByLocation(int mallid);
+        public List<MallMapDecorator> GetMapsByLocation(int mallid);
         public string CreateMap(MapV map);
     }
 }
