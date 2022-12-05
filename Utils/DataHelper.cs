@@ -75,21 +75,30 @@ namespace MallMapsApi.Utils
         }
         internal static Dictionary<string, int[]> GetXYFromGeo(SqlGeometry sqlGeo)
         {
-            Dictionary<string, int[]> _XYvalues = new Dictionary<string, int[]>();
-
-            List<int> x = new List<int>();
-            List<int> y = new List<int>();
-            for (int i = 0; i < sqlGeo.STNumPoints(); i++)
+            try
             {
-                var matchCollection = Regex.Matches(sqlGeo.STPointN(i+1).ToString(), @"(\d+)");
-                x.Add(int.Parse(matchCollection[0].Value));
-                y.Add(int.Parse(matchCollection[1].Value));
+                Dictionary<string, int[]> _XYvalues = new Dictionary<string, int[]>();
+
+                List<int> x = new List<int>();
+                List<int> y = new List<int>();
+                for (int i = 0; i < sqlGeo.STNumPoints(); i++)
+                {
+                    var matchCollection = Regex.Matches(sqlGeo.STPointN(i + 1).ToString(), @"(\d+)");
+                    x.Add(int.Parse(matchCollection[0].Value));
+                    y.Add(int.Parse(matchCollection[1].Value));
+                }
+
+                _XYvalues.Add("XPos", x.ToArray());
+                _XYvalues.Add("YPos", y.ToArray());
+
+                return _XYvalues;
             }
+            catch (Exception ex)
+            {
 
-            _XYvalues.Add("XPos", x.ToArray());
-            _XYvalues.Add("YPos", y.ToArray());
+                return new Dictionary<string, int[]>();
 
-            return _XYvalues;
+            }
         }
     }
 }
