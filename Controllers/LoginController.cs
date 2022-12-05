@@ -17,14 +17,14 @@ namespace MallMapsApi.Controllers
         }
 
         [HttpPost("Login")]
-        public IActionResult Login(string uName, string password)
+        public IActionResult Login(string uname, string password)
         {
             try
             {
-                if (uName.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace())
+                if (uname.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace())
                     return BadRequest("Username or password was empty");
 
-                SessionUserDecorator sessionUser = _verify.Verifiy(uName, password);
+                SessionUserDecorator sessionUser = _verify.Verifiy(uname, password);
 
                 if (sessionUser == null)
                     return BadRequest("Username or password was wrong");

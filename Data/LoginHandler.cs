@@ -84,12 +84,8 @@ namespace MallMapsApi.Data
         /// <exception cref="NotImplementedException"></exception>
         public SessionUserDecorator Verifiy(string username, string password)
         {
-            //create and lookup on database
-            Dictionary<string, object> searchObject = new Dictionary<string, object>();
-            searchObject.Add("username", username);
-            searchObject.Add("password", password);
             //Get firmUser that match search object 
-            FirmUser user = _crud.Get<FirmUser>(searchObject)?.FirstOrDefault();
+            FirmUser user = _crud.Get<FirmUser>().FirstOrDefault(o => o.Username == username && o.Password == password);
             //Check if any user found 
             if (user == null)
                 return null;

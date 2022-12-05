@@ -303,7 +303,7 @@ namespace MallMapsApi.Utils
                             continue;
                         //set property value from Datacolumn to PropInfo
                         if (columnName == column.ColumnName)
-                            propInfo.SetValue(obj, row[columnName]);
+                            propInfo.SetValue(obj, Convert.ChangeType(row[columnName], propInfo.PropertyType), null);
 
                     }
                 }

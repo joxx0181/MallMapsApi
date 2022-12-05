@@ -54,7 +54,7 @@ namespace MallMapsApi.Data
                 else //create basic component 
                     basicComponents.Add(new BasicComponentDecorator(components[i], GeoDataMapper(components[i].Geodata)));
             }
-            componentDict.Add("IconComponent",iconComponents);
+            componentDict.Add("IconComponent", iconComponents);
             componentDict.Add("BasicComponent", basicComponents);
             //if any component dic return dictionary
             if (componentDict.Count > 0)

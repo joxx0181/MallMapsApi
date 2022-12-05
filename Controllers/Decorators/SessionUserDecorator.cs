@@ -21,5 +21,10 @@ namespace MallMapsApi.Controllers.Decorators
         {
             get { return _firmuser.SessionKey; }
         }
+
+        public int FirmID
+        {
+            get { return _firmuser.Firmid; }
+        }
     }
 }
