@@ -79,9 +79,9 @@ namespace MallMapsApi.Utils
 
             List<int> x = new List<int>();
             List<int> y = new List<int>();
-            for (int i = 1; i < sqlGeo.STNumPoints(); i++)
+            for (int i = 0; i < sqlGeo.STNumPoints(); i++)
             {
-                var matchCollection = Regex.Matches(sqlGeo.STPointN(i).ToString(), @"(\d+)");
+                var matchCollection = Regex.Matches(sqlGeo.STPointN(i+1).ToString(), @"(\d+)");
                 x.Add(int.Parse(matchCollection[0].Value));
                 y.Add(int.Parse(matchCollection[1].Value));
             }

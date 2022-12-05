@@ -85,7 +85,7 @@ namespace MallMapsApi.Data
             var geoType = DataHelper.GetGeoType(geo);
             var xyDict = DataHelper.GetXYFromGeo(geo);
             var x = xyDict["XPos"];
-            var y = xyDict["XPos"];
+            var y = xyDict["YPos"];
             return new GeodataV(geoType, x, y, (Int32)geo.STSrid);
         }
 
