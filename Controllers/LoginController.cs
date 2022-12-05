@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MallMapsApi.DTO;
 using MallMapsApi.Interface;
+using MallMapsApi.Controllers.Decorators;
+using MallMapsApi.Utils;
 
 namespace MallMapsApi.Controllers
 {
@@ -16,18 +17,51 @@ namespace MallMapsApi.Controllers
         }
 
         [HttpPost("Login")]
-        public IActionResult Login(FirmUser user)
+        public IActionResult Login(string uname, string password)
         {
-            _verify.Verifiy(user);
-            return Ok();
+            try
+            {
+                if (uname.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace())
+                    return BadRequest("Username or password was empty");
+
+                SessionUserDecorator sessionUser = _verify.Verifiy(uname, password);
+
+                if (sessionUser == null)
+                    return BadRequest("Username or password was wrong");
+
+                return Ok(sessionUser);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Exception was hit" + e.Message);
+            }
         }
 
-        [HttpPost("Create")]
+ 
 
-        public IActionResult Create(FirmUser user)
+        [HttpPost("Create")]
+        public IActionResult Create(string username, string password, string role, int firmid)
         {
-            _verify.CreateUser(user);
-            return Ok();
+            try
+            {
+                if (username.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace() || role.IsStringNullOrWhiteSpace() || DataHelper.CVRIsNotValid(firmid))
+                    return BadRequest("Values was not inserted correct");
+                
+
+                return Ok(_verify.CreateUser(username, password, role, firmid));
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Exception was hit" + e.Message);
+            }
+        }
+
+
+        [HttpGet("GetUsers")]
+        public IActionResult GetUsers()
+        {
+            return Ok(_verify.GetUsers());
         }
     }
 }
