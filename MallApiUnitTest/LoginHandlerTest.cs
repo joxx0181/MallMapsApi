@@ -22,7 +22,7 @@ namespace MallApiUnitTest
             var firmUsers = new List<FirmUser>();
             firmUsers.Add(fakeUser);
 
-            var fakeCrud = A.Fake<ICrudAcess>();
+            var fakeCrud = A.Fake<ICrudAccess>();
 
             A.CallTo(() => fakeCrud.Get<FirmUser>(A<Dictionary<string, object>>.Ignored)).Returns(firmUsers);
 
@@ -37,7 +37,7 @@ namespace MallApiUnitTest
         [Fact]
         public void IsSessionUserNull_Mapping_Verifiy()
         {
-            var fakeCrud = A.Fake<ICrudAcess>();
+            var fakeCrud = A.Fake<ICrudAccess>();
 
             A.CallTo(() => fakeCrud.Get<FirmUser>(A<Dictionary<string, object>>.Ignored)).Returns(null);
 
@@ -53,7 +53,7 @@ namespace MallApiUnitTest
         {
             var expected = "User added";
 
-            var fakeCrud = A.Fake<ICrudAcess>();
+            var fakeCrud = A.Fake<ICrudAccess>();
 
             LoginHandler handler = new LoginHandler(fakeCrud);
             A.CallTo(() => fakeCrud.InsertScalar<FirmUser>(A<FirmUser>.Ignored)).Returns(-1);

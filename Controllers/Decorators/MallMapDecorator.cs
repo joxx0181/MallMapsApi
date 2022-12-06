@@ -6,11 +6,12 @@ namespace MallMapsApi.Controllers.Decorators
     public class MallMapDecorator
     {
         private Map _Map;
-        DataMapper DataMapper { get; set; } = new DataMapper();
+        private DataMapper DataMapper { get; set; }
 
         public MallMapDecorator(Map map)
         {
             _Map = map;
+            DataMapper = new DataMapper();
         }
 
         public int Layer

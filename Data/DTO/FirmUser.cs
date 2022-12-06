@@ -10,15 +10,7 @@ namespace MallMapsApi.Data.DTO
     [Table(Name = "FirmUser")]
     public class FirmUser
     {
-        internal FirmUser(int iD, string username, string password, string role, string sessionKey, int firmid)
-        {
-            ID = iD;
-            Username = username;
-            Password = password;
-            Role = role;
-            SessionKey = sessionKey;
-            Firmid = firmid;
-        }
+        
 
         [JsonIgnore]
         [Column(Name = "id", IgnoreSql = true)]
@@ -40,7 +32,15 @@ namespace MallMapsApi.Data.DTO
         public int Firmid { get; set; }
         
         public Firm FirmidRef { get; set; }
-
+        internal FirmUser(int id, string username, string password, string role, string sessionKey, int firmid)
+        {
+            this.ID = id;
+            this.Username = username;
+            this.Password = password;
+            this.Role = role;
+            this.SessionKey = sessionKey;
+            this.Firmid = firmid;
+        }
         public FirmUser()
         {
 

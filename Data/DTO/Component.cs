@@ -44,11 +44,11 @@ namespace MallMapsApi.Data.DTO
 
         public Component(int mapID, byte[] img, string description, SqlGeometry geodata, int zindex)
         {
-            MapID = mapID;
-            Img = img;
-            Description = description;
-            Geodata = geodata;
-            Zindex = zindex;
+            this.MapID = mapID;
+            this.Img = img;
+            this.Description = description;
+            this.Geodata = geodata;
+            this.Zindex = zindex;
         }
 
         public Component()

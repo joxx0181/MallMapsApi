@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<ICrudAcess, DataAcess>();
+builder.Services.AddScoped<ICrudAccess, DataAcess>();
 builder.Services.AddScoped<IVerify, LoginHandler>();
 builder.Services.AddScoped<IComponent, ComponentHandler>();
 builder.Services.AddScoped<IMap, MapHandler>();

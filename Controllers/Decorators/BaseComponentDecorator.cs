@@ -9,11 +9,6 @@ namespace MallMapsApi.Controllers.Decorators
         protected Component component;
         protected GeodataV geodataV;
 
-        public BaseComponentDecorator(Component _component, GeodataV _geodataV)
-        {
-            component = _component;
-            geodataV = _geodataV;
-        }
         public int Zindex
         {
             get { return component.Zindex; }
@@ -24,6 +19,11 @@ namespace MallMapsApi.Controllers.Decorators
             get { return component.MapID; }
         }
 
+        public BaseComponentDecorator(Component _component, GeodataV _geodataV)
+        {
+            component = _component;
+            geodataV = _geodataV;
+        }
         public GeodataV GeoData
         {
             get { return geodataV; }

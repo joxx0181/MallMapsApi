@@ -6,10 +6,6 @@ namespace MallMapsApi.Controllers.Decorators
     {
         private Mall mall;
 
-        public MallDecorator(Mall mall)
-        {
-            this.mall = mall;
-        }
         public int Id
         {
             get { return mall.Id; }
@@ -17,6 +13,11 @@ namespace MallMapsApi.Controllers.Decorators
         public string Location
         {
             get { return mall.Location; }
+        }
+        
+        public MallDecorator(Mall mall)
+        {
+            this.mall = mall;
         }
     }
 }

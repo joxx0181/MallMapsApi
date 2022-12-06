@@ -13,18 +13,18 @@ namespace MallMapsApi.Data
     public class LoginHandler : IVerify
     {
         /// <summary>
+        /// Database access
+        /// </summary>
+        private readonly ICrudAccess _crud;
+        /// <summary>
         /// DataMapper for FirmUser
         /// </summary>
         public DataMapper mapper;
         /// <summary>
-        /// Database access
-        /// </summary>
-        private readonly ICrudAcess _crud;
-        /// <summary>
         /// Create an instance and implement database
         /// </summary>
         /// <param name="crud">Interface for db</param>
-        public LoginHandler(ICrudAcess crud)
+        public LoginHandler(ICrudAccess crud)
         {
             _crud = crud;
         }

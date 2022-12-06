@@ -30,7 +30,7 @@ namespace MallApiUnitTest
             components.Add(fakecomponent);
             components.Add(fakecomponent2);
 
-            var fakeCrud = A.Fake<ICrudAcess>();
+            var fakeCrud = A.Fake<ICrudAccess>();
 
             A.CallTo(() => fakeCrud.Get<Component>(A<Dictionary<string, object>>.Ignored)).Returns(components);
 
@@ -55,7 +55,7 @@ namespace MallApiUnitTest
         [Fact]
         public void IsComponentsNull_Mapping_GetByID()
         {
-            var fakeCrud = A.Fake<ICrudAcess>();
+            var fakeCrud = A.Fake<ICrudAccess>();
 
             A.CallTo(() => fakeCrud.Get<Component>(A<Dictionary<string, object>>.Ignored)).Returns(null);
 
