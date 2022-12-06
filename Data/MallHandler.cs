@@ -6,10 +6,10 @@ namespace MallMapsApi.Data
 {
     public class MallHandler : IMall
     {
-        public DataMapper mapper;
+        private readonly ICrudAccess _crud;
 
-        private readonly ICrudAcess _crud;
-        public MallHandler(ICrudAcess crud)
+        public DataMapper mapper;
+        public MallHandler(ICrudAccess crud)
         {
             _crud = crud;
         }

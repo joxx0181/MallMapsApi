@@ -57,25 +57,25 @@ namespace MallMapsApi.Utils
         /// Build sql insert command use AddWithValues to prevent sql injection
         /// </summary>
         /// <typeparam name="BaseEntity">object type </typeparam>
-        /// <param name="baseEntity">Object to insert  into sql</param>
+        /// <param name="entity">Object to insert  into sql</param>
         /// <param name="sql">Methods will add into sql</param>
         /// <returns>SqlCommand</returns>
-        /// <exception cref="ArgumentNullException">Require baseEntity has CustomAttribute Column and Table -> see CustomAttributes folder</exception>
-        internal static SqlCommand BuildInsert<BaseEntity>(BaseEntity baseEntity, SqlCommand sql)
+        /// <exception cref="ArgumentNullException">Require entity has CustomAttribute Column and Table -> see CustomAttributes folder</exception>
+        internal static SqlCommand BuildInsert<BaseEntity>(BaseEntity entity, SqlCommand sql)
         {
             //Get the custom attribute table name 
-            var tableName = GetTableName<BaseEntity>(baseEntity);
+            var tableName = GetTableName<BaseEntity>(entity);
             //Check if the table name is null or empty 
             if (DataHelper.IsStringNullOrWhiteSpace(tableName))
                 throw new ArgumentNullException("Check if table name is set or table name is spelled correctly");
-            //Check if baseEntity is null
-            if (baseEntity == null)
+            //Check if entity is null
+            if (entity == null)
                 throw new ArgumentNullException("baseEntity must not be null!");
             //Check if sqlCommand is null
             if (sql == null)
                 throw new ArgumentNullException("baseEntity must not be null!");
             //GetChildren IEnumerable<propertyInfo> for all properties that has an row.
-            var ColumnProperties = baseEntity.GetType().GetProperties().Where(o => o.GetCustomAttribute<Column>() != null);
+            var ColumnProperties = entity.GetType().GetProperties().Where(o => o.GetCustomAttribute<Column>() != null);
             //if no ColumnProperties found, then its not gonna match our database.
             if (ColumnProperties.Count() == 0)
                 throw new ArgumentNullException("BaseEntity does not contain CustomAttributeColumn");
@@ -85,19 +85,19 @@ namespace MallMapsApi.Utils
                 //by using pattern matching we type testing if the customattribute is type column and then with declaring pattern to get run time parameter
                 if (propInfo.GetCustomAttribute<Column>() is Column column)
                 {
-                    //Get custom attribute from prop info, due to where statement above, i know there is no null attr
+                    //Get custom attribute from prop propInfo, due to where statement above, i know there is no null attr
                     if (column.IgnoreSql == true)
                         continue;
                     //add paramaters to prevent sql injection
-                    if (propInfo.GetValue(baseEntity) is null)
-                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(baseEntity,propInfo,true), -1);
+                    if (propInfo.GetValue(entity) is null)
+                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(entity,propInfo,true), -1);
                     else
-                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(baseEntity, propInfo,true, '@'), GetPropertyValue<BaseEntity>(baseEntity, propInfo));
+                        sql.Parameters.AddWithValue(GetColumnName<BaseEntity>(entity, propInfo,true, '@'), GetPropertyColumnValue<BaseEntity>(entity, propInfo));
                 }
             }
 
             //creating sql command text for insert command
-            sql.CommandText = $"Insert into {tableName} ({GetColumnNames<BaseEntity>(baseEntity, ',')}) VALUES({GetColumnNames<BaseEntity>(baseEntity, ',', '@')})";
+            sql.CommandText = $"Insert into {tableName} ({GetColumnNames<BaseEntity>(entity, ',')}) VALUES({GetColumnNames<BaseEntity>(entity, ',', '@')})";
             return sql;
         }
 
@@ -141,19 +141,19 @@ namespace MallMapsApi.Utils
         /// </summary>
         /// <typeparam name="Entity">the type of the object</typeparam>
         /// <param name="entity">object that belong to property objPropInfo</param>
-        /// <param name="info">the propertyInfo you want the columnName from</param>
+        /// <param name="propInfo">the propertyInfo you want the columnName from</param>
         /// <param name="frontChar">Puts an char in front of the row name</param>
         /// <returns>string value of row name with or without frontchar</returns>
         /// <exception cref="ArgumentNullException">Throw on nulls, No customattribute, customAttribute with IgnoreSql == true</exception>
-        internal static string GetColumnName<Entity>(Entity entity, PropertyInfo info,bool ignoresql, char frontChar = default(char))
+        internal static string GetColumnName<Entity>(Entity entity, PropertyInfo propInfo,bool ignoresql, char frontChar = default(char))
         {
             try
             {
                 //security check
-                if (entity == null || info == null)
+                if (entity == null || propInfo == null)
                     throw new ArgumentNullException("entity is null");
                 //We should not recieve and propertyInfo with ignoreSql here
-                if (info.GetCustomAttribute<Column>() is Column column)
+                if (propInfo.GetCustomAttribute<Column>() is Column column)
                 {
                     //check if ignoreSql i set, if true return empty string
                     if (column.IgnoreSql == true && ignoresql == true)
@@ -179,11 +179,11 @@ namespace MallMapsApi.Utils
         /// GetChildren property value with security check
         /// </summary>
         /// <typeparam name="BaseEntity">object type</typeparam>
-        /// <param name="baseEntity">the base entity object </param>
-        /// <param name="propInfo">property info</param>
+        /// <param name="entity">the base entity object </param>
+        /// <param name="propInfo">property propInfo</param>
         /// <returns>Return the value from an property if property has custom attribute row</returns>
         /// <exception cref="ArgumentNullException">Checks for null and customAttribute is set, if ignoreSql = true throw execption</exception>
-        internal static object GetPropertyValue<BaseEntity>(BaseEntity baseEntity, PropertyInfo propInfo)
+        internal static object GetPropertyColumnValue<BaseEntity>(BaseEntity entity, PropertyInfo propInfo)
         {
             try
             {
@@ -191,7 +191,7 @@ namespace MallMapsApi.Utils
                 if (propInfo == null)
                     throw new ArgumentNullException("GetPropertyValue : propertyInfo is null");
                 //BaseEntity is not allowed to be null here, if not throw and Execption.
-                if (baseEntity == null)
+                if (entity == null)
                     throw new ArgumentNullException("GetPropertyValue : propertyInfo is null");
                 //Info should contain customAttribute, if not throw and Execption
                 if (propInfo.GetCustomAttribute<Column>() is Column column)
@@ -201,7 +201,7 @@ namespace MallMapsApi.Utils
                         throw new Exception("GetColumnName : Custom attribute Ignoresql found.");
 
                     //GetChildren value from propertyInfo from the object parsed, if value is null return null value
-                    return propInfo.GetValue(baseEntity) ?? null;
+                    return propInfo.GetValue(entity) ?? null;
                 }
                 else
                     throw new ArgumentNullException("GetPropertyValue : CustomAttribute Column is null");
@@ -217,10 +217,10 @@ namespace MallMapsApi.Utils
         /// <summary>
         /// GetChildren table custom atribute of the class by using reflection
         /// </summary>
-        /// <typeparam name="Entity">Object type</typeparam>
+        /// <typeparam name="BaseEntity">Object type</typeparam>
         /// <param name="entity">object</param>
         /// <returns></returns>
-        internal static string GetTableName<Entity>(Entity entity)
+        internal static string GetTableName<BaseEntity>(BaseEntity entity)
         {
             //GetChildren custom attribute from class with reflection
             if (entity.GetType().GetCustomAttribute<Table>() is Table table)
@@ -229,7 +229,7 @@ namespace MallMapsApi.Utils
         }
 
         /// <summary>
-        /// Convert DataRow to baseEntity
+        /// Convert DataRow to entity
         /// </summary>
         /// <param name="row">Data row to convert</param>
         /// <param name="type">Type u want back</param>
@@ -322,7 +322,7 @@ namespace MallMapsApi.Utils
         /// <param name="table"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        internal static IEnumerable<object> ConvertToBaseEntity(bool ignoreSql,DataTable table, Type type = default(Type))
+        internal static IEnumerable<object> ConvertToObjectCollection(bool ignoreSql,DataTable table, Type type = default(Type))
         {
             //Creating an list of objects
             List<object> entities = new List<object>();

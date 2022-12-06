@@ -11,7 +11,7 @@ namespace MallMapsApi.Data
     /// <summary>
     /// Class for dataAccess
     /// </summary>
-    public class DataAcess : ICrudAcess
+    public class DataAcess : ICrudAccess
     {
         /// <summary>
         /// configration file
@@ -33,8 +33,6 @@ namespace MallMapsApi.Data
             con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
         }
-
-
         /// <summary>
         /// We can search for up to 2 diffrent criterias, Key is colum name and value is value
         /// </summary>
@@ -78,13 +76,12 @@ namespace MallMapsApi.Data
                 CloseConnection();
             }
         }
-
         /// <summary>
         /// Get all children from an object 
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private IEnumerable<object> GetChildren(bool ignoreSql,Type type = default(Type))
+        private IEnumerable<object> GetChildren(bool ignoreSql,Type type)
         {
             try
             {
@@ -104,7 +101,7 @@ namespace MallMapsApi.Data
                 //load all data from reader into datatable 
                 data.Load(reader);
                 //Convert DataTable to list of objects and return it 
-                return DbHelper.ConvertToBaseEntity(ignoreSql,data, type);
+                return DbHelper.ConvertToObjectCollection(ignoreSql,data, type);
             }
             catch (Exception ex)
             {
@@ -161,7 +158,6 @@ namespace MallMapsApi.Data
                 CloseConnection();
             }
         }
-
         /// <summary>
         /// Get collection from storeProcedure 
         /// </summary>
@@ -191,7 +187,7 @@ namespace MallMapsApi.Data
                 data.Load(reader);
                 //Convert data into collection from typeParam
                 var entities = DbHelper.ConvertToBaseEntity<BaseEntity>(data, true);
-                //Loop through each entity and map foreignkeys
+                //Loop through each baseEntity and map foreignkeys
                 foreach (var entity in entities)
                 {
                     //map all foreignkeys
@@ -213,35 +209,34 @@ namespace MallMapsApi.Data
             }
         }
         /// <summary>
-        /// Add all reference to entity
+        /// Add all reference to baseEntity
         /// </summary>
         /// <typeparam name="BaseEntity">object type param</typeparam>
-        /// <param name="entity">object type</param>
-        public void JoinOnGet<BaseEntity>(BaseEntity entity)
+        /// <param name="baseEntity">object type</param>
+        public void JoinOnGet<BaseEntity>(BaseEntity baseEntity)
         {
             //Get all properties where it has an foreignkey and type is class
-            var classProperties = entity.GetType().GetProperties().Where(x => x.GetCustomAttribute<ForeignKey>() != null && x.GetType().IsClass);
+            var classProperties = baseEntity.GetType().GetProperties().Where(x => x.GetCustomAttribute<ForeignKey>() != null && x.GetType().IsClass);
             //Loop throgu all properties
             foreach (var prop in classProperties)
             {
                 //Get foreignkey value
-                var val = prop.GetValue(entity);
+                var val = prop.GetValue(baseEntity);
                 //if value is null go to next 
                 if (val == null)
                     continue;
                 //Get object property reference 
-                var refProp = entity.GetType().GetProperty(prop.Name + "Ref");
+                var refProp = baseEntity.GetType().GetProperty(prop.Name + "Ref");
                 //if there is no object property that referece to object then continue
                 if (refProp == null)
                     continue;
                 //if refprop is an type of collection then we want to set all into the property 
                 if (DataHelper.IsEnumerableType(refProp))
-                    refProp.SetValue(entity, GetChildren(true,refProp.PropertyType));
+                    refProp.SetValue(baseEntity, GetChildren(true,refProp.PropertyType));
                 else //if nots an property of an object we only want the first match.
-                    refProp.SetValue(entity, GetChildren(true,refProp.PropertyType).FirstOrDefault());
+                    refProp.SetValue(baseEntity, GetChildren(true,refProp.PropertyType).FirstOrDefault());
             }
         }
-
         /// <summary>
         /// Insert and return id
         /// </summary>
@@ -303,17 +298,6 @@ namespace MallMapsApi.Data
                 CloseConnection();
             }
         }
-        
-        public BaseEntity Update<BaseEntity>(BaseEntity baseEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BaseEntity Delete<BaseEntity>(BaseEntity baseEntity)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Open db connection
         /// </summary>
@@ -323,7 +307,6 @@ namespace MallMapsApi.Data
             if (con.State != System.Data.ConnectionState.Open)
                 con.Open();
         }
-
         /// <summary>
         /// Close connection for db 
         /// </summary>
@@ -333,10 +316,6 @@ namespace MallMapsApi.Data
             if (con.State != System.Data.ConnectionState.Closed)
                 con.Close();
         }
-
-
-
-
         public int ValidateUser(string user, string psw)
         {
             try
@@ -360,7 +339,6 @@ namespace MallMapsApi.Data
             }
 
         }
-
         public void UpdateSession(string session, int sessionID)
         {
             try
@@ -382,7 +360,5 @@ namespace MallMapsApi.Data
                 CloseConnection();
             }
         }
-
-
     }
 }

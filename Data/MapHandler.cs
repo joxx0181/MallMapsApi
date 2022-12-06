@@ -10,14 +10,14 @@ namespace MallMapsApi.Data
     /// </summary>
     public class MapHandler : IMap
     {
-        private readonly ICrudAcess _crudAcess;
+        private readonly ICrudAccess _crudAccess;
         /// <summary>
         /// Create instance of mapHandler.
         /// </summary>
-        /// <param name="crudAcess">CrudAccess for database</param>
-        public MapHandler(ICrudAcess crudAcess)
+        /// <param name="crudAccess">CrudAccess for database</param>
+        public MapHandler(ICrudAccess crudAccess)
         {
-            _crudAcess = crudAcess;
+            _crudAccess = crudAccess;
         }
 
         /// <summary>
@@ -35,14 +35,14 @@ namespace MallMapsApi.Data
                 //Map the MapV inputs into Dto map
                 var mp = mapper.MapMapper(map);
                 //Insert Dto into database and get the iD
-                var id = _crudAcess.InsertScalar<Map>(mp);
+                var id = _crudAccess.InsertScalar<Map>(mp);
                 //Run through all components
                 foreach (var component in mp.Components)
                 {
                     //Set component ID 
                     component.MapID = id;
                     //Insert each component
-                    _crudAcess.Insert<Component>(component);
+                    _crudAccess.Insert<Component>(component);
                 }
                 //Return success
                 return "Completed";
@@ -59,7 +59,7 @@ namespace MallMapsApi.Data
         {
             DataMapper mapper = new DataMapper();
             ///Get maps from databases where mallID match
-            IEnumerable<Map> maps = _crudAcess.Get<Map>().Where(x => x.MallId == mallid);
+            IEnumerable<Map> maps = _crudAccess.Get<Map>().Where(x => x.MallId == mallid);
             //if not there is any maps return empty list
             if (!maps.Any())
                 return new List<MallMapDecorator>();
@@ -68,13 +68,13 @@ namespace MallMapsApi.Data
             foreach (var map in maps)
             {
                 //Get components by storedProcedure and where mapId = mallID
-                var it = _crudAcess.GetByProcedure<Component>("GetComponents").Where(o => o.MapID == map.Id);
+                var it = _crudAccess.GetByProcedure<Component>("GetComponents").Where(o => o.MapID == map.Id);
                 //Create a new list for map object components
                 map.Components = new List<Component>();
                 //add components to the list 
                 map.Components.AddRange(it.ToList());
                 //Map mall reference to the map
-                map.MallRef = _crudAcess.Get<Mall>().FirstOrDefault(x => x.Id == mallid) ?? default(Mall);
+                map.MallRef = _crudAccess.Get<Mall>().FirstOrDefault(x => x.Id == mallid) ?? default(Mall);
             }
             //return map
             return mapper.DecoratorMallMapMapper(maps);

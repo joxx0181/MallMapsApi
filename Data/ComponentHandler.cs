@@ -12,13 +12,13 @@ namespace MallMapsApi.Data
         /// <summary>
         /// DatabaseAccess
         /// </summary>
-        private ICrudAcess _crudAcess;
+        private ICrudAccess _crudAcess;
 
         /// <summary>
         /// Handles all components
         /// </summary>
         /// <param name="crudAcess"></param>
-        public ComponentHandler(ICrudAcess crudAcess)
+        public ComponentHandler(ICrudAccess crudAcess)
         {
             _crudAcess = crudAcess;
         }

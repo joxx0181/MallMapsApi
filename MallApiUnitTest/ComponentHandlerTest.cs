@@ -34,7 +34,7 @@ namespace MallApiUnitTest
             components.Add(fakecomponent);
             components.Add(fakecomponent2);
 
-            var fakeCrud = A.Fake<ICrudAcess>();
+            var fakeCrud = A.Fake<ICrudAccess>();
 
             A.CallTo(() => fakeCrud.Get<Component>()).Returns(components);
 

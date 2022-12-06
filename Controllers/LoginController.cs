@@ -37,18 +37,16 @@ namespace MallMapsApi.Controllers
             }
         }
 
- 
-
         [HttpPost("Create")]
-        public IActionResult Create(string username, string password, string role, int firmid)
+        public IActionResult Create(string uname, string password, string role, int firmid)
         {
             try
             {
-                if (username.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace() || role.IsStringNullOrWhiteSpace() || DataHelper.CVRIsNotValid(firmid))
+                if (uname.IsStringNullOrWhiteSpace() || password.IsStringNullOrWhiteSpace() || role.IsStringNullOrWhiteSpace() || DataHelper.CVRIsNotValid(firmid))
                     return BadRequest("Values was not inserted correct");
                 
 
-                return Ok(_verify.CreateUser(username, password, role, firmid));
+                return Ok(_verify.CreateUser(uname, password, role, firmid));
 
             }
             catch (Exception e)
@@ -56,7 +54,6 @@ namespace MallMapsApi.Controllers
                 return BadRequest("Exception was hit" + e.Message);
             }
         }
-
 
         [HttpGet("GetUsers")]
         public IActionResult GetUsers()
