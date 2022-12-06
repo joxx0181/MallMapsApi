@@ -2,6 +2,9 @@
 using MallMapsApi.Data.DTO;
 using MallMapsApi.Data;
 using Microsoft.SqlServer.Types;
+using System.Collections.Generic;
+using FakeItEasy;
+using MallMapsApi.Controllers.Views;
 
 namespace MallApiUnitTest
 {
@@ -30,24 +33,30 @@ namespace MallApiUnitTest
         public void GetDictonaryOfComponents_Mapping_ComponentMapper()
         {
             byte[] fakeimg = new byte[] { 10, 20, 33, 21, 10, 23 };
-
+            int[] fakeX = new int[0];
+            int[] fakeY = new int[0];
             var fakecomponent = new Component(1, fakeimg, "beskrivelse", new SqlGeometry(), 1);
             var fakecomponent2 = new Component(1, null, null, new SqlGeometry(), 1);
+            var fakeGeoV1 = new GeodataV("GEOMETRYCOLLECTION", fakeX, fakeY, 0);
+            var fakeGeoV2 = new GeodataV("GEOMETRYCOLLECTION", fakeX, fakeY, 0);
 
             var fakeComponentList = new List<Component>();
             fakeComponentList.Add(fakecomponent);
             fakeComponentList.Add(fakecomponent2);
 
-            var expectedFakeComponentDecorator = new IconComponentDecorator(fakecomponent,null);
-            var expectedFakeComponentDecorator2 = new BasicComponentDecorator(fakecomponent2,null);
+            var expectedFakeComponentDecorator = new IconComponentDecorator(fakecomponent, fakeGeoV1);
+            var expectedFakeComponentDecorator2 = new BasicComponentDecorator(fakecomponent2, fakeGeoV2);
 
             DataMapper dataMapper = new DataMapper();
             var actual = dataMapper.ComponentMapper(fakeComponentList);
 
-            IconComponentDecorator item1 = (IconComponentDecorator)actual["IconComponent"];
-            BasicComponentDecorator item2 = (BasicComponentDecorator)actual["BasicComponent"];
+            IconComponentDecorator item1 = ((IEnumerable<IconComponentDecorator>)actual["IconComponent"]).FirstOrDefault();
+            BasicComponentDecorator item2 = ((IEnumerable<BasicComponentDecorator>)actual["BasicComponent"]).FirstOrDefault();
 
-            Assert.Equal(expectedFakeComponentDecorator.GeoData, item1.GeoData);
+            Assert.Equal(expectedFakeComponentDecorator.GeoData.Type, item1.GeoData.Type);
+            Assert.Equal(expectedFakeComponentDecorator.GeoData.XInput, item1.GeoData.XInput);
+            Assert.Equal(expectedFakeComponentDecorator.GeoData.YInput, item1.GeoData.YInput);
+            Assert.Equal(expectedFakeComponentDecorator.GeoData.Srid, item1.GeoData.Srid);
             Assert.Equal(expectedFakeComponentDecorator.Image, item1.Image);
             Assert.Equal(expectedFakeComponentDecorator.MapId, item1.MapId);
             Assert.Equal(expectedFakeComponentDecorator.Description, item1.Description);
@@ -55,7 +64,10 @@ namespace MallApiUnitTest
 
             Assert.Equal(expectedFakeComponentDecorator2.Zindex, item2.Zindex);
             Assert.Equal(expectedFakeComponentDecorator2.MapId, item2.MapId);
-            Assert.Equal(expectedFakeComponentDecorator2.GeoData, item2.GeoData);
+            Assert.Equal(expectedFakeComponentDecorator2.GeoData.Type, item2.GeoData.Type);
+            Assert.Equal(expectedFakeComponentDecorator2.GeoData.XInput, item2.GeoData.XInput);
+            Assert.Equal(expectedFakeComponentDecorator2.GeoData.YInput, item2.GeoData.YInput);
+            Assert.Equal(expectedFakeComponentDecorator2.GeoData.Srid, item2.GeoData.Srid);
 
         }
 
@@ -73,12 +85,17 @@ namespace MallApiUnitTest
         [Fact]
         public void IsComponentsEmpty_Mapping_ComponentMapper()
         {
+            var expected = new List<Component>();
 
             DataMapper dataMapper = new DataMapper();
 
             var actual = dataMapper.ComponentMapper(new List<Component>());
 
-            Assert.Null(actual);
+            var item1 = ((IEnumerable<IconComponentDecorator>)actual["IconComponent"]).ToList();
+            var item2 = ((IEnumerable<BasicComponentDecorator>)actual["BasicComponent"]).ToList();
+
+            Assert.Equal(expected.Count,item1.Count);
+            Assert.Equal(expected.Count,item2.Count);
         }
     }
 }

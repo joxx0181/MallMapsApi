@@ -36,11 +36,9 @@ namespace MallMapsApi.Data
                 //Creating an instance of datamapper
                 _mapper = new DataMapper();
                 //creating an dictionary
-                Dictionary<string, object> searchObject = new Dictionary<string, object>();
                 //adding search values 
-                searchObject.Add("Mapid", mapid);
                 //Fetching components from db
-                List<Component> components = _crudAcess.Get<Component>(searchObject)?.ToList();
+                List<Component> components = _crudAcess.Get<Component>().Where(x => x.MapID == mapid).ToList();
                 //Map components
                 Dictionary<string, object> data = _mapper.ComponentMapper(components);
                 //return data if not null

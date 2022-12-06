@@ -24,7 +24,7 @@ namespace MallApiUnitTest
 
             var fakeCrud = A.Fake<ICrudAcess>();
 
-            A.CallTo(() => fakeCrud.Get<FirmUser>(A<Dictionary<string, object>>.Ignored)).Returns(firmUsers);
+            A.CallTo(() => fakeCrud.Get<FirmUser>()).Returns(firmUsers);
 
             LoginHandler handler = new LoginHandler(fakeCrud);
 
