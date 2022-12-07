@@ -3,6 +3,9 @@ using MallMapsApi.Interface;
 
 namespace MallMapsApi.Data
 {
+    /// <summary>
+    /// The Handler of components before sending them to DataBase
+    /// </summary>
     public class ComponentHandler : IComponent
     {
         /// <summary>
@@ -29,7 +32,7 @@ namespace MallMapsApi.Data
         /// <param name="mapid"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Dictionary<string, object> GetById(int mapid)
+        public Dictionary<string, object>? GetById(int mapid)
         {
             try
             {
@@ -49,7 +52,7 @@ namespace MallMapsApi.Data
             }
             catch (Exception e)
             {
-                throw e;
+                throw e ?? throw new ArgumentNullException("GetByID : threw and execption that was null");
             }
         }
     }
