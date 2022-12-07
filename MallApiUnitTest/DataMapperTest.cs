@@ -97,5 +97,36 @@ namespace MallApiUnitTest
             Assert.Equal(expected.Count,item1.Count);
             Assert.Equal(expected.Count,item2.Count);
         }
+
+        [Fact]
+
+        public void IsMapVMapedToMap_Mapping_MapMapper()
+        {
+            var fakeMapV = new MapV(1, 0, new List<ComponentV>());
+            int[] fakeX = new int[] { 10, 20, 30, 10 };
+            int[] fakeY = new int[] { 10, 30, 20, 10 };
+            fakeMapV.Components.Add(new ComponentV("", 0, new GeodataV("POLYGON", fakeX, fakeY, 4321)));
+
+            var expectedSqlDat = SqlGeometry.Parse("POLYGON((10 10,20 30,30 20,10 10))");
+            expectedSqlDat.STSrid = 4321;
+
+            var expected = new Map(1, 0);
+            expected.Components.Add(new Component(-1, null, "",expectedSqlDat, 0));
+
+            DataMapper mapper = new DataMapper();
+
+            var actual = mapper.MapMapper(fakeMapV);
+
+            Assert.Equal(expected.Id, actual.Id);
+            Assert.Equal(expected.MallId, actual.MallId);
+            Assert.Equal(expected.Layer, actual.Layer);
+            Assert.Equal(expected.MallRef, actual.MallRef);
+            Assert.Equal(expected.Components.FirstOrDefault().MapID, actual.Components.FirstOrDefault().MapID);
+            Assert.Equal(expected.Components.FirstOrDefault().Id, actual.Components.FirstOrDefault().Id);
+            Assert.Equal(expected.Components.FirstOrDefault().GetGeoData, actual.Components.FirstOrDefault().GetGeoData);
+            Assert.Equal(expected.Components.FirstOrDefault().Img, actual.Components.FirstOrDefault().Img);
+            Assert.Equal(expected.Components.FirstOrDefault().Description, actual.Components.FirstOrDefault().Description);
+
+        }
     }
 }
