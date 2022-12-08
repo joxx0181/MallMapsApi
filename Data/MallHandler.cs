@@ -6,9 +6,18 @@ namespace MallMapsApi.Data
 {
     public class MallHandler : IMall
     {
+        /// <summary>
+        /// Database caller
+        /// </summary>
         private readonly ICrudAccess _crud;
-
+        /// <summary>
+        /// Data mapper to map objects
+        /// </summary>
         public DataMapper mapper;
+        /// <summary>
+        /// injects ICrudAccess runtime
+        /// </summary>
+        /// <param name="crud">DB caller</param>
         public MallHandler(ICrudAccess crud)
         {
             _crud = crud;

@@ -72,9 +72,9 @@ namespace MallMapsApi.Data
             //Creating new object of map
             Map map = new Map(mapV.MallID, mapV.Layer);
             //Adding all components to map
-            foreach (var item in mapV.Components)
+            foreach (var vMap in mapV.Components)
             {
-                map.Components.Add(new Component(-1, null, item.Description, item.CreateGeoDat(), item.ZIndex));
+                map.Components.Add(new Component(-1, null, vMap.Description, vMap.CreateGeoDat(), vMap.ZIndex));
             }
             //return map
             return map;
@@ -105,7 +105,7 @@ namespace MallMapsApi.Data
         /// </summary>
         /// <param name="malls"></param>
         /// <returns></returns>
-        public List<MallDecorator> DecoratorMallMapper(IEnumerable<Mall> malls)
+        public IEnumerable<MallDecorator> DecoratorMallMapper(IEnumerable<Mall> malls)
         {
             List<MallDecorator> decorators = new List<MallDecorator>();
             foreach (var mall in malls)
@@ -120,7 +120,7 @@ namespace MallMapsApi.Data
         /// <param name="maps"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public List<MallMapDecorator> DecoratorMallMapMapper(IEnumerable<Map> maps)
+        public IEnumerable<MallMapDecorator> DecoratorMallMapMapper(IEnumerable<Map> maps)
         {
             List<MallMapDecorator> decorators = new List<MallMapDecorator>();
             foreach (var map in maps)

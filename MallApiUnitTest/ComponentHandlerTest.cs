@@ -68,7 +68,7 @@ namespace MallApiUnitTest
             var expected1 = new List<IconComponentDecorator>();
             var expected2 = new List<BasicComponentDecorator>();
 
-            var fakeCrud = A.Fake<ICrudAcess>();
+            var fakeCrud = A.Fake<ICrudAccess>();
 
             A.CallTo(() => fakeCrud.Get<Component>()).Returns(new HashSet<Component>());
 

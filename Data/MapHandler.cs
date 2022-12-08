@@ -55,7 +55,7 @@ namespace MallMapsApi.Data
         /// </summary>
         /// <param name="mallid">id for the mall</param>
         /// <returns></returns>
-        public List<MallMapDecorator> GetMapsByLocation(int mallid)
+        public IEnumerable<MallMapDecorator> GetMapsByLocation(int mallid)
         {
             DataMapper mapper = new DataMapper();
             ///Get maps from databases where mallID match

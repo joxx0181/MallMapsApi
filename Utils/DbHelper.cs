@@ -131,6 +131,7 @@ namespace MallMapsApi.Utils
             }
             catch (Exception ex)
             {
+                //TODO : Log exception
                 //if for some reason the exception is null, be sure that throw an execption of wich method failed
                 throw ex ?? new ArgumentNullException("GetColumnNames threw an execption that was null");
             }
@@ -170,6 +171,7 @@ namespace MallMapsApi.Utils
             }
             catch (Exception ex)
             {
+                //TODO : Log exception
                 //Throw execption, due warning about ex could be null, we making sure that we return our own execption.
                 throw ex ?? new ArgumentNullException("GetColumnNames threw an execption that was null");
             }
@@ -209,7 +211,7 @@ namespace MallMapsApi.Utils
             }
             catch (Exception ex)
             {
-                //TODO : LOG execption
+                //TODO : Log exception
                 return null;
             }
         }
@@ -313,6 +315,7 @@ namespace MallMapsApi.Utils
             }
             catch (Exception ex)
             {
+                //TODO : Log exception
                 throw ex ?? new ArgumentNullException("GetAsEntity threw an execption");
             }
         }
@@ -367,6 +370,7 @@ namespace MallMapsApi.Utils
             }
             catch (Exception ex)
             {
+                //TODO : Log exception
                 throw ex ?? new Exception("ConvertToBaseEntity : threw an execption that was null");
             }
         }
