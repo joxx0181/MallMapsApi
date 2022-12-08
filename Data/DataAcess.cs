@@ -105,7 +105,7 @@ namespace MallMapsApi.Data
             }
             catch (Exception ex)
             {
-                //TODO : log for now return null
+                //TODO : Log exception
                 return null;
             }
             finally
@@ -198,8 +198,8 @@ namespace MallMapsApi.Data
             }
             catch (Exception ex)
             {
-               //TODO : LOG ex
-               //return empty collection
+                //TODO : Log exception
+                //return empty collection
                 return new HashSet<BaseEntity>();
             }
             finally
@@ -259,7 +259,7 @@ namespace MallMapsApi.Data
             }
             catch (Exception ex)
             {
-                //TODO : log execption
+                //TODO : Log exception
                 //Return -1 if error happen
                 return -1;
             }
@@ -288,7 +288,7 @@ namespace MallMapsApi.Data
             }
             catch (Exception ex)
             {
-                //TODO : LOG exception
+                //TODO : Log exception
                 //Return -1 upon error
                 return -1;
             }
