@@ -72,7 +72,7 @@ namespace MallMapsApi.Data.DTO
         /// <summary>
         /// Empty constructor for Reflection Activator. 
         /// </summary>
-        internal FirmUser()
+        public FirmUser()
         {
 
         }
