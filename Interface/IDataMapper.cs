@@ -56,5 +56,8 @@ namespace MallMapsApi.Interface
         /// <param name="maps"></param>
         /// <returns>Collection of MallMapDecorator</returns>
         public IEnumerable<MallMapDecorator> DecoratorMallMapMapper(IEnumerable<Map> maps);
+
+        // Create new object of Firm for returning new Firm
+        public Firm FirmMapper(int cvr, string name);
     }
 }

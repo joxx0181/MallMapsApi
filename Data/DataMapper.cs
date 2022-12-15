@@ -129,5 +129,12 @@ namespace MallMapsApi.Data
             }
             return decorators;
         }
+
+        // Return a firm object
+        public Firm FirmMapper(int cvr, string name)
+        {
+            Firm firm = new Firm(cvr, name);
+            return firm;
+        }
     }
 }
